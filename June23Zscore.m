@@ -1,6 +1,6 @@
 %% Plots zscores for each behavior occurance - Green channel
 % updated: 6/17/20 by Anna McTigue
-
+%Test test. I'm not sure how this works yet.
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTime3
 
 % Initialize arrays
