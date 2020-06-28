@@ -3,15 +3,19 @@
 % 1/29/2020
 % 5/30/2020
 % 6/11/2020
-% Test I am adding something
 
 format long
 
-% load in datasets
-behaviorData = T152711; %time stamps corresponding to vole behavior
-fData = Test20200409T152711; %fluorescent data
+% Import Data
+prompt = 'Enter the behavior data file name \n';
+behavior_file_name = input(prompt, 's'); %time stamps corresponding to vole behavior
+behaviorData = readtable(behavior_file_name);
 
-% separate columns
+prompt = 'Enter the fluoresence data file name \n';
+f_file_name = input(prompt, 's');
+fData = readtable(f_file_name); %fluorescent data
+
+% Separate columns
 fTime = table2array(fData(:,1)); %time column in fluorescent data
 
 fRedL = table2array(fData(:,3)); %3rd column in fluorescent data = red left 
@@ -92,8 +96,11 @@ behaviorIdx = {}; %will be populated with licking indices
 behaviorT = {};
 j=1;
 
+% Select behavior to analyze
+prompt = 'What behavior do you want to analyze? \n';
+behavior_name = input(prompt, 's');
 for i = 1:length(behavior)
-    if behavior(i)=='Side by Side'
+    if string(behavior(i))== behavior_name
         behaviorIdx{j} = i;
         behaviorT{j} = bTime(i);
         j=j+1; 
