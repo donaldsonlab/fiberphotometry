@@ -1,6 +1,6 @@
 %% Plots zscores for each behavior occurance - Green channel
 % updated: 6/17/20 by Anna McTigue
-%Test test. I'm not sure how this works yet.
+
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTime3
 
 % Initialize arrays
@@ -82,6 +82,9 @@ curve2 = curve2.';
 %% Plotting
 x = [-3:(8/(minlenB)):+5];  % holds minlenB points between -2 and 5
 
+prompt = 'What would you like to title your graph? \n';
+graph_title = input(prompt,'s');
+
 figure
 % Plots z scores for each behavior bout
 for i=1:length(behaviorT)
@@ -92,7 +95,7 @@ end
 plot(x,zscore_green_avg,'LineWidth',4)
 xlabel('Time (s)')
 ylabel('zscore')
-title('Side by Side 2020-04-09T152711')
+title(graph_title)
 hold on
 xline(0,':','LineWidth',2);
 
