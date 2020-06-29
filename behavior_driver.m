@@ -22,7 +22,7 @@ fData = readtable(f_file_name);
 
 % Import behaviors to analyze
 behaviors_input = input('What behaviors would you like analyzed? \n','s');
-behaviors = regexp(behaviors_input,',','split');
+behaviors = regexp(behaviors_input,', ','split');
 
 % To hard code behaviors use this:
 % behaviors_input = 'Nose to Nose, Side by Side';
