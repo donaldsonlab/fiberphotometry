@@ -3,17 +3,9 @@
 % 1/29/2020
 % 5/30/2020
 % 6/11/2020
+% 6/29/2020
 
 format long
-
-% Import Data
-prompt = 'Enter the behavior data file name \n';
-behavior_file_name = input(prompt, 's'); %time stamps corresponding to vole behavior
-behaviorData = readtable(behavior_file_name);
-
-prompt = 'Enter the fluoresence data file name \n';
-f_file_name = input(prompt, 's');
-fData = readtable(f_file_name); %fluorescent data
 
 % Separate columns
 fTime = table2array(fData(:,1)); %time column in fluorescent data
@@ -97,8 +89,8 @@ behaviorT = {};
 j=1;
 
 % Select behavior to analyze
-prompt = 'What behavior do you want to analyze? \n';
-behavior_name = input(prompt, 's');
+% prompt = 'What behavior do you want to analyze? \n';
+% behavior_name = input(prompt, 's');
 for i = 1:length(behavior)
     if string(behavior(i))== behavior_name
         behaviorIdx{j} = i;
@@ -163,7 +155,8 @@ finboutIdx = {}; %index of end bout
 %% plot behavior times on raw data plot as tick marks
 
 %Left Green Plot
-figure('Name', 'Left Green Plot')
+lgplot_title = string(behavior_name) + ' Left Green Plot';
+figure('Name', lgplot_title)
 subplot(3,1,1)
 plot(fTime1,fGreenL1)
 xlabel('Time (ms)')
@@ -181,6 +174,9 @@ subplot(3,1,2)
 plot(fTime2,fGreenL2)
 xlabel('Time (ms)')
 ylabel('Red')
+for i = 1:length(behaviorT)
+    xline(behaviorT(i),'k')
+end 
 for i = 1:length(startbout)
      xline(startbout(i),'g');
  end
@@ -202,7 +198,8 @@ for i = 1:length(finbout)
 end
 
 %Left Red PLot
-figure('Name', 'Left Red Plot')
+lrplot_title = string(behavior_name) + ' Left Red Plot';
+figure('Name', lrplot_title)
 subplot(3,1,1)
 plot(fTime1,fRedL1)
 xlabel('Time (ms)')
@@ -220,6 +217,9 @@ subplot(3,1,2)
 plot(fTime2,fRedL2)
 xlabel('Time (ms)')
 ylabel('Red')
+for i = 1:length(behaviorT)
+    xline(behaviorT(i),'k')
+end 
 for i = 1:length(startbout)
      xline(startbout(i),'g');
  end
@@ -241,7 +241,8 @@ for i = 1:length(finbout)
 end
 
 % Right Green Plot
-figure('Name', 'Right Green Plot')
+rgplot_title = string(behavior_name) + ' Right Green Plot';
+figure('Name', rgplot_title)
 subplot(3,1,1)
 plot(fTime1,fGreenR1)
 xlabel('Time (ms)')
@@ -283,7 +284,8 @@ for i = 1:length(finbout)
 end
 
 %Right Red Plot
-figure('Name', 'Right Red Plot')
+rrplot_title = string(behavior_name) + ' Right Red Plot';
+figure('Name', rrplot_title)
 subplot(3,1,1)
 plot(fTime1,fRedR1)
 xlabel('Time (ms)')
@@ -301,6 +303,9 @@ subplot(3,1,2)
 plot(fTime2,fRedR2)
 xlabel('Time (ms)')
 ylabel('Red')
+for i = 1:length(behaviorT)
+    xline(behaviorT(i),'k')
+end 
 for i = 1:length(startbout)
      xline(startbout(i),'g');
  end
@@ -320,3 +325,6 @@ end
 for i = 1:length(finbout)
     xline(finbout(i),'r');
 end
+
+
+
