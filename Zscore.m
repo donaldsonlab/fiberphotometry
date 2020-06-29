@@ -1,6 +1,13 @@
-%% Plots zscores for each behavior occurance (Green)
+%% Plots zscores for each behavior occurance (Asks for channel)
 % updated: 6/29/20 by Anna McTigue
 
+%% Asks what channel to analyze
+list = {'fGreenL1','fGreenL2','fGreenL3','fGreenR1','fGreenR2','fGreenR3',...
+    'fRedL1','fRedL2','fRedL3','fRedR1','fRedR2','fRedR3'};
+[indx,tf] = listdlg('PromptString',{'Channels'},'ListString',list);
+channels = {fGreenL1,fGreenL2,fGreenL3,fGreenR1,fGreenR2,fGreenR3,...
+    fRedL1,fRedL2,fRedL3,fRedR1,fRedR2,fRedR3};
+channel = cell2mat(channels(indx));
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTime3
 
 % Initialize arrays
@@ -31,8 +38,8 @@ for i = 1:length(behaviorT)
     ends_idx(i)=idx4;
 end
 
-% std of all fluorescent signal in green channel
-std_green = std(fGreenR3); 
+% std of all fluorescent signal in channel
+std_channel = std(channel); 
 
 % adjusts indices so that they are all the same
 minlenB = min(ends_idx-three_start_idx); % looks at range in indices
@@ -53,16 +60,16 @@ zscore=zeros(length(behaviorT),minlenB+1);
 % calculates z score for each behavior occurance
 for i = 1:length(behaviorT)
     % floursence signal from -2sec to 5sec behavior
-    entire_range(i,:) = fGreenR3(three_start_idx(i):ends_idx(i)).'; 
+    entire_range(i,:) = channel(three_start_idx(i):ends_idx(i)).'; 
     % baseline avg calculated as mean from 3 to 2 seconds before behavior
-    zscore(i,:) = (entire_range(i,:) - mean(fGreenR3((three_start_idx(i)):two_start_idx(i)).'))/std_green;       
+    zscore(i,:) = (entire_range(i,:) - mean(channel((three_start_idx(i)):two_start_idx(i)).'))/std_channel;       
 end
 
 %% Calculates average zscores for each time point in each bout
 
-zscore_green_avg = zeros(1,minlenB+1);
+zscore_channel_avg = zeros(1,minlenB+1);
 for j = 1:minlenB+1
-    zscore_green_avg(j) = mean(zscore(:,j));
+    zscore_channel_avg(j) = mean(zscore(:,j));
 end 
 
 %% Standard Error of the Mean 
@@ -70,11 +77,11 @@ end
 std_zavg = std(zscore);
 
 % calculate standard error
-sem_green = std_zavg/sqrt(length(behaviorT(i)));
+sem_channel = std_zavg/sqrt(length(behaviorT(i)));
 
 %plot avg zscore with shaded std/sem
-curve1 = zscore_green_avg + sem_green;
-curve2 = zscore_green_avg - sem_green;
+curve1 = zscore_channel_avg + sem_channel;
+curve2 = zscore_channel_avg - sem_channel;
   
 curve1 = curve1.';
 curve2 = curve2.';
@@ -93,7 +100,7 @@ for i=1:length(behaviorT)
     plot(x,zscore(i,:),'k',0,0.5);
 end
 % Plots avg z score across all bouts
-plot(x,zscore_green_avg,'LineWidth',4)
+plot(x,zscore_channel_avg,'LineWidth',4)
 xlabel('Time (s)')
 ylabel('zscore')
 title(graph_title)
