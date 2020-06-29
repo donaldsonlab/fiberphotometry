@@ -1,5 +1,5 @@
-%% Plots zscores for each behavior occurance - Green channel
-% updated: 6/17/20 by Anna McTigue
+%% Plots zscores for each behavior occurance (Green)
+% updated: 6/29/20 by Anna McTigue
 
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTime3
 
@@ -82,8 +82,9 @@ curve2 = curve2.';
 %% Plotting
 x = [-3:(8/(minlenB)):+5];  % holds minlenB points between -2 and 5
 
-prompt = 'What would you like to title your graph? \n';
-graph_title = input(prompt,'s');
+% prompt = 'What would you like to title your graph? \n';
+% graph_title = input(prompt,'s');
+graph_title = string(behavior_name) + ' ' + string(behavior_file_name);
 
 figure
 % Plots z scores for each behavior bout
@@ -102,4 +103,3 @@ xline(0,':','LineWidth',2);
 % SEM lines
 plot(x,curve1,'r',0,0.5,'LineWidth',2);
 plot(x,curve2,'r',0,0.5,'LineWidth',2);
-
