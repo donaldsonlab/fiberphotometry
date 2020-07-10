@@ -1,14 +1,7 @@
 %% Plots zscores for each behavior occurance (Asks for channel)
 % updated: 6/29/20 by Anna McTigue
 
-%% Asks what channel to analyze
-list = {'fGreenL1','fGreenL2','fGreenL3','fGreenR1','fGreenR2','fGreenR3',...
-    'fRedL1','fRedL2','fRedL3','fRedR1','fRedR2','fRedR3'};
-[indx,tf] = listdlg('PromptString',{'Channels'},'ListString',list);
-channels = {fGreenL1,fGreenL2,fGreenL3,fGreenR1,fGreenR2,fGreenR3,...
-    fRedL1,fRedL2,fRedL3,fRedR1,fRedR2,fRedR3};
-channel = cell2mat(channels(indx));
-%% Determines indices of behaviorT, 2sec before, & 5sec after in fTime3
+%% Determines indices of behaviorT, 2sec before, & 5sec after in fTimeChannel
 
 % Initialize arrays
 three_start_baseline = zeros(1,length(behaviorT)); % 3 sec before bout
@@ -21,20 +14,20 @@ behaviorIdx = zeros(1,length(behaviorT));
 
 % Sets arrays with respective indices
 for i = 1:length(behaviorT)
-    %finds index in fTime3 that is closest to behaviorT(i)
-    [val,idx1]=min(abs(fTime3-behaviorT(i))); 
+    %finds index in fTimeChannel that is closest to behaviorT(i)
+    [val,idx1]=min(abs(fTimeChannel-behaviorT(i))); 
     behaviorIdx(i)=idx1;
-    % 3sec before bout (index in fTime3)
-    three_start_baseline(i) = max(behaviorT(i) - 3000, fTime3(1));
-    [val,idx2]=min(abs(fTime3-three_start_baseline(i)));
+    % 3sec before bout (index in fTimeChannel)
+    three_start_baseline(i) = max(behaviorT(i) - 3000, fTimeChannel(1));
+    [val,idx2]=min(abs(fTimeChannel-three_start_baseline(i)));
     three_start_idx(i)=idx2;
-    % 2sec before bout (index in fTime3)
-    two_startBaseline(i) = max(behaviorT(i) - 2000, fTime3(1)); 
-    [val,idx3]=min(abs(fTime3-two_startBaseline(i)));
+    % 2sec before bout (index in fTimeChannel)
+    two_startBaseline(i) = max(behaviorT(i) - 2000, fTimeChannel(1)); 
+    [val,idx3]=min(abs(fTimeChannel-two_startBaseline(i)));
     two_start_idx(i)=idx3;
     %calculates time 5 seconds after each start bout
-    ends(i) = min(fTime3(end),behaviorT(i) + 5000); 
-    [val,idx4]=min(abs(fTime3-ends(i)));
+    ends(i) = min(fTimeChannel(end),behaviorT(i) + 5000); 
+    [val,idx4]=min(abs(fTimeChannel-ends(i)));
     ends_idx(i)=idx4;
 end
 
@@ -91,7 +84,8 @@ x = [-3:(8/(minlenB)):+5];  % holds minlenB points between -2 and 5
 
 % prompt = 'What would you like to title your graph? \n';
 % graph_title = input(prompt,'s');
-graph_title = string(behavior_name) + ' ' + string(behavior_file_name);
+graph_title = string(behavior_name) + ' Animal no. '+ animal_num + ...
+    ' Channel: ' + channel_name;
 
 figure
 % Plots z scores for each behavior bout
