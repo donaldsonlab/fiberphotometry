@@ -3,11 +3,10 @@
 % 1/29/2020
 % 5/30/2020
 % 6/11/2020
-% 6/29/2020
-%Github demo for anne and Katie
-format long
 
-% Separate columns
+format long
+%% Read Tables
+
 fTime = table2array(fData(:,1)); %time column in fluorescent data
 
 fRedL = table2array(fData(:,3)); %3rd column in fluorescent data = red left 
@@ -22,32 +21,32 @@ bTime = double(bTime);
 %% De-interleave (if driver box NOT reset properly)
 
 % determining which row index is red channel
-offset1 = fGreenR(1:3:end);
-offset2 = fGreenR(2:3:end);
-offset3 = fGreenR(3:3:end);
-stdoffsets = [std(offset1), std(offset2), std(offset3)];
-redIdx = find(stdoffsets == min(stdoffsets(:)));
+offset1 = fRedR(1:3:end);
+offset2 = fRedR(2:3:end);
+offset3 = fRedR(3:3:end);
+meanoffsets = [mean(offset1), mean(offset2), mean(offset3)];
+redIdx = find(meanoffsets == max(meanoffsets(:)));
 
 % assigning correct rows to colors
-fGreenL1 = fGreenL(redIdx+2:3:end);
-fGreenL2 = fGreenL(redIdx:3:end);
-fGreenL3 = fGreenL(redIdx+1:3:end);
+fGreenLisosbestic = fGreenL(redIdx+2:3:end); %iso
+fGreenLred = fGreenL(redIdx:3:end); %red
+fGreenLgreen = fGreenL(redIdx+1:3:end);%green
 
-fGreenR1 = fGreenR(redIdx+2:3:end);
-fGreenR2 = fGreenR(redIdx:3:end);
-fGreenR3 = fGreenR(redIdx+1:3:end);
+fGreenRisosbestic = fGreenR(redIdx+2:3:end);
+fGreenRred = fGreenR(redIdx:3:end);
+fGreenRgreen = fGreenR(redIdx+1:3:end);
 
-fRedR1 = fRedR(redIdx+2:3:end);
-fRedR2 = fRedR(redIdx:3:end);
-fRedR3 = fRedR(redIdx+1:3:end);
+fRedRisosbestic = fRedR(redIdx+2:3:end);
+fRedRred = fRedR(redIdx:3:end);
+fRedRgreen = fRedR(redIdx+1:3:end);
 
-fRedL1 = fRedL(redIdx+2:3:end);
-fRedL2 = fRedL(redIdx:3:end);
-fRedL3 = fRedL(redIdx+1:3:end);
+fRedLisosbestic = fRedL(redIdx+2:3:end);
+fRedLred = fRedL(redIdx:3:end);
+fRedLgreen = fRedL(redIdx+1:3:end);
 
-fTime1 = fTime(redIdx+2:3:end);
-fTime2 = fTime(redIdx:3:end);
-fTime3 = fTime(redIdx+1:3:end);
+fTimeIsosbestic = fTime(redIdx+2:3:end);
+fTimeRed = fTime(redIdx:3:end);
+fTimeGreen = fTime(redIdx+1:3:end);
 
 %% De-interleave (if driver box was reset properly)
 % should record in following order: 470nm, 560nm, 415nm
@@ -55,31 +54,29 @@ fTime3 = fTime(redIdx+1:3:end);
 % 3 rows) for each channel, taking every 3
 
 % %Left Green
-% fGreenL1 = fGreenL(5:3:end);
-% fGreenL2 = fGreenL(6:3:end);
-% fGreenL3 = fGreenL(7:3:end);
+% fGreenLisosbestic = fGreenL(5:3:end);
+% fGreenLred = fGreenL(6:3:end);
+% fGreenLgreen = fGreenL(7:3:end);
 % 
 % %Left Red
-% fRedL1 = fRedL(5:3:end);
-% fRedL2 = fRedL(6:3:end);
-% fRedL3 = fRedL(7:3:end);
+% fRedLisosbestic = fRedL(5:3:end);
+% fRedLred = fRedL(6:3:end);
+% fRedLgreen = fRedL(7:3:end);
 % 
 % %Right Green
-% fGreenR1 = fGreenR(5:3:end);
-% fGreenR2 = fGreenR(6:3:end);
-% fGreenR3 = fGreenR(7:3:end);
+% fGreenRisosbestic = fGreenR(5:3:end);
+% fGreenRred = fGreenR(6:3:end);
+% fGreenRgreen = fGreenR(7:3:end);
 % 
 % %Right Red
-% fRedR1 = fRedR(5:3:end);
-% fRedR2 = fRedR(6:3:end);
-% fRedR3 = fRedR(7:3:end);
+% fRedRisosbestic = fRedR(5:3:end);
+% fRedRred = fRedR(6:3:end);
+% fRedRgreen = fRedR(7:3:end);
 % 
 % %Time
-% fTime1 = fTime(5:3:end);
-% fTime2 = fTime(6:3:end);
-% fTime3 = fTime(7:3:end);
-
-
+% fTimeIsosbestic = fTime(5:3:end);
+% fTimeRed = fTime(6:3:end);
+% fTimeGreen = fTime(7:3:end);
 
 %% Minimize behavior data
 %pull out index and time for every time behavior occurs
@@ -92,7 +89,7 @@ j=1;
 % prompt = 'What behavior do you want to analyze? \n';
 % behavior_name = input(prompt, 's');
 for i = 1:length(behavior)
-    if string(behavior(i))== behavior_name
+    if string(behavior(i)) == behavior_name
         behaviorIdx{j} = i;
         behaviorT{j} = bTime(i);
         j=j+1; 
@@ -155,10 +152,10 @@ finboutIdx = {}; %index of end bout
 %% plot behavior times on raw data plot as tick marks
 
 %Left Green Plot
-lgplot_title = string(behavior_name) + ' Left Green Plot';
+lgplot_title = string(behavior_name) + ' Left Green Plot ' + ' Animal no. '+ animal_num;
 figure('Name', lgplot_title)
 subplot(3,1,1)
-plot(fTime1,fGreenL1)
+plot(fTimeIsosbestic,fGreenLisosbestic)
 xlabel('Time (ms)')
 ylabel('Isosbestic')
 for i = 1:length(behaviorT)
@@ -171,7 +168,7 @@ for i = 1:length(finbout)
     xline(finbout(i),'r');
 end
 subplot(3,1,2)
-plot(fTime2,fGreenL2)
+plot(fTimeRed,fGreenLred)
 xlabel('Time (ms)')
 ylabel('Red')
 for i = 1:length(behaviorT)
@@ -184,7 +181,7 @@ for i = 1:length(finbout)
      xline(finbout(i),'r');
 end
 subplot(3,1,3)
-plot(fTime3,fGreenL3)
+plot(fTimeGreen,fGreenLgreen)
 xlabel('Time (ms)')
 ylabel('Green')
 for i = 1:length(behaviorT)
@@ -198,10 +195,10 @@ for i = 1:length(finbout)
 end
 
 %Left Red PLot
-lrplot_title = string(behavior_name) + ' Left Red Plot';
+lrplot_title = string(behavior_name) + ' Left Red Plot' + ' Animal no. '+ animal_num;
 figure('Name', lrplot_title)
 subplot(3,1,1)
-plot(fTime1,fRedL1)
+plot(fTimeIsosbestic,fRedLisosbestic)
 xlabel('Time (ms)')
 ylabel('Isosbestic')
 for i = 1:length(behaviorT)
@@ -214,7 +211,7 @@ for i = 1:length(finbout)
     xline(finbout(i),'r');
 end
 subplot(3,1,2)
-plot(fTime2,fRedL2)
+plot(fTimeRed,fRedLred)
 xlabel('Time (ms)')
 ylabel('Red')
 for i = 1:length(behaviorT)
@@ -227,7 +224,7 @@ for i = 1:length(finbout)
      xline(finbout(i),'r');
 end
 subplot(3,1,3)
-plot(fTime3,fRedL3)
+plot(fTimeGreen,fRedLgreen)
 xlabel('Time (ms)')
 ylabel('Green')
 for i = 1:length(behaviorT)
@@ -241,10 +238,10 @@ for i = 1:length(finbout)
 end
 
 % Right Green Plot
-rgplot_title = string(behavior_name) + ' Right Green Plot';
+rgplot_title = string(behavior_name) + ' Right Green Plot' + ' Animal no. '+ animal_num;;
 figure('Name', rgplot_title)
 subplot(3,1,1)
-plot(fTime1,fGreenR1)
+plot(fTimeIsosbestic,fGreenRisosbestic)
 xlabel('Time (ms)')
 ylabel('Isosbestic')
 for i = 1:length(behaviorT)
@@ -257,7 +254,7 @@ end
 %    xline(finbout(i),'r');
 %end
 subplot(3,1,2)
-plot(fTime2,fGreenR2)
+plot(fTimeRed,fGreenRred)
 xlabel('Time (ms)')
 ylabel('Red')
 for i = 1:length(behaviorT)
@@ -270,7 +267,7 @@ for i = 1:length(finbout)
      xline(finbout(i),'r');
 end
 subplot(3,1,3)
-plot(fTime3,fGreenR3)
+plot(fTimeGreen,fGreenRgreen)
 xlabel('Time (ms)')
 ylabel('Green')
 for i = 1:length(behaviorT)
@@ -284,10 +281,10 @@ for i = 1:length(finbout)
 end
 
 %Right Red Plot
-rrplot_title = string(behavior_name) + ' Right Red Plot';
+rrplot_title = string(behavior_name) + ' Right Red Plot' + ' Animal no. '+ animal_num;;
 figure('Name', rrplot_title)
 subplot(3,1,1)
-plot(fTime1,fRedR1)
+plot(fTimeIsosbestic,fRedRisosbestic)
 xlabel('Time (ms)')
 ylabel('Isospestic')
 for i = 1:length(behaviorT)
@@ -300,7 +297,7 @@ for i = 1:length(finbout)
     xline(finbout(i),'r');
 end
 subplot(3,1,2)
-plot(fTime2,fRedR2)
+plot(fTimeRed,fRedRred)
 xlabel('Time (ms)')
 ylabel('Red')
 for i = 1:length(behaviorT)
@@ -313,7 +310,7 @@ for i = 1:length(finbout)
      xline(finbout(i),'r');
 end
 subplot(3,1,3)
-plot(fTime3,fRedR3)
+plot(fTimeGreen,fRedRgreen)
 xlabel('Time (ms)')
 ylabel('Green')
 for i = 1:length(behaviorT)
