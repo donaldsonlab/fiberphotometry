@@ -1,5 +1,8 @@
 %% Plots zscores for each behavior occurance (Asks for channel)
-% updated: 6/29/20 by Anna McTigue
+% UPDATE THIS EACH NEW VERSION (date of update):
+zversion = 'v.8/22/20'; 
+% RENAME OLD FILE WITH DATE (for collie)
+% Keep current file name as: Zscore_wdriver.m
 
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTimeChannel
 
@@ -92,7 +95,7 @@ x = [-3:(8/(minlenB)):+5];  % holds minlenB points between -2 and 5
 % prompt = 'What would you like to title your graph? \n';
 % graph_title = input(prompt,'s');
 graph_title = string(behavior_name) + ' Animal no. '+ animal_num + ...
-    ' Channel: ' + channel_name;
+    ' Channel: ' + channel_name + ' ' + zversion;
 
 figure
 % Plots z scores for each behavior bout
@@ -128,4 +131,6 @@ disp('Minimum Z-score: ')
 disp(min_zscore)
 disp('Average Z-score: ')
 disp(avg_zscore)
+disp('Z-score Script zversion:')
+disp(zversion)
 disp('--------------------------------------------------------------')
