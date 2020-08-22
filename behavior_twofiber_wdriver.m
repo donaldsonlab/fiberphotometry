@@ -1,8 +1,10 @@
 %% Script to analze behavior fluorescence data
 % written by Katie Gallagher Edited by Kathleen Murphy & Anna McTigue
-% 1/29/2020
-% 5/30/2020
-% 6/11/2020
+
+% UPDATE THIS EACH NEW VERSION (date of update):
+twofiberversion = 'v.8/22/2020'; 
+% RENAME OLD FILE WITH DATE (for collie)
+% Keep current file name as: behavior_twofiber_wdriver.m
 
 format long
 %% Read Tables
@@ -81,7 +83,7 @@ fTimeGreen = fTime(redIdx+1:3:end);
 %% Minimize behavior data
 %pull out index and time for every time behavior occurs
 %initialize matrices to hold indices and corresponding times
-behaviorIdx = {}; %will be populated with licking indices
+behaviorIdx = {}; %will be populated with behavior indices
 behaviorT = {};
 j=1;
 
@@ -152,7 +154,8 @@ finboutIdx = {}; %index of end bout
 %% plot behavior times on raw data plot as tick marks
 
 %Left Green Plot
-lgplot_title = string(behavior_name) + ' Left Green Plot ' + ' Animal no. '+ animal_num;
+lgplot_title = string(behavior_name) + ' Left Green Plot ' + ' Animal no. '+ ... 
+    animal_num + ' ' + twofiberversion;
 figure('Name', lgplot_title)
 subplot(3,1,1)
 plot(fTimeIsosbestic,fGreenLisosbestic)
@@ -195,7 +198,8 @@ for i = 1:length(finbout)
 end
 
 %Left Red PLot
-lrplot_title = string(behavior_name) + ' Left Red Plot' + ' Animal no. '+ animal_num;
+lrplot_title = string(behavior_name) + ' Left Red Plot' + ' Animal no. '+ ... 
+    animal_num + ' ' + twofiberversion;
 figure('Name', lrplot_title)
 subplot(3,1,1)
 plot(fTimeIsosbestic,fRedLisosbestic)
@@ -238,7 +242,8 @@ for i = 1:length(finbout)
 end
 
 % Right Green Plot
-rgplot_title = string(behavior_name) + ' Right Green Plot' + ' Animal no. '+ animal_num;;
+rgplot_title = string(behavior_name) + ' Right Green Plot' + ' Animal no. '+ ... 
+    animal_num + ' ' + twofiberversion;
 figure('Name', rgplot_title)
 subplot(3,1,1)
 plot(fTimeIsosbestic,fGreenRisosbestic)
@@ -281,7 +286,8 @@ for i = 1:length(finbout)
 end
 
 %Right Red Plot
-rrplot_title = string(behavior_name) + ' Right Red Plot' + ' Animal no. '+ animal_num;;
+rrplot_title = string(behavior_name) + ' Right Red Plot' + ' Animal no. '+ ... 
+    animal_num + ' ' + twofiberversion;
 figure('Name', rrplot_title)
 subplot(3,1,1)
 plot(fTimeIsosbestic,fRedRisosbestic)
