@@ -1,8 +1,7 @@
 %% Plots zscores for each behavior occurance (Asks for channel)
 % UPDATE THIS EACH NEW VERSION (date of update):
-zversion = 'v.8/22/20'; 
-% RENAME OLD FILE WITH DATE (for collie)
-% Keep current file name as: Zscore_wdriver.m
+zversion = 'v1.1'; 
+
 
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTimeChannel
 

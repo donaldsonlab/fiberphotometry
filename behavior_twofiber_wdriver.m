@@ -1,10 +1,8 @@
-%% Script to analze behavior fluorescence data
+%% Script to analze behavior fluorescence data (two fiber) 
 % written by Katie Gallagher Edited by Kathleen Murphy & Anna McTigue
 
 % UPDATE THIS EACH NEW VERSION (date of update):
-twofiberversion = 'v.8/22/2020'; 
-% RENAME OLD FILE WITH DATE (for collie)
-% Keep current file name as: behavior_twofiber_wdriver.m
+twofiberversion = 'v1.1'; 
 
 format long
 %% Read Tables
@@ -12,9 +10,9 @@ format long
 fTime = table2array(fData(:,1)); %time column in fluorescent data
 
 fRedL = table2array(fData(:,3)); %3rd column in fluorescent data = red left 
-fGreenL = table2array(fData(:,4)); %4th = green right
+fGreenL = table2array(fData(:,4)); %4th = green left
 fRedR = table2array(fData(:,5)); % red right
-fGreenR = table2array(fData(:,6)); % green left
+fGreenR = table2array(fData(:,6)); % green right
 
 bTime = table2array(behaviorData(:,3)); % time of behavior 
 behavior = table2array(behaviorData(:,2)); % actual behavior
