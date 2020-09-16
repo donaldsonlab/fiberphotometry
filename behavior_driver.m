@@ -1,24 +1,29 @@
 %% Creates Z-score plot for all behaviors 
-% updated 7/10/20 by Anna
+% updated 9/10/20 by Anna
 
 %% To Hard code files/behaviors use this
 % % Behavior file: 
-% behavior_file_name = '2020-06-10T15_09_22.csv';
+% behavior_file_name = '1fiberbehaviortest.csv';
 % behaviorData = readtable(behavior_file_name);
 % 
 % % Fluoresence file:
-% f_file_name = 'FiberPhoSig2020-06-10T15_09_21.csv';
+% f_file_name = '1fibersignaltest.csv';
 % fData = readtable(f_file_name);
-
+% 
 % % Behaviors: 
-% behaviors_input = 'Nose to Nose, Side by Side';
+% behaviors_input = 'Autogroom';
 % behaviors = regexp(behaviors_input,', ','split');
+% 
+% % Animal number:
+% animal_num = 1234;
 
 %% Imports Data
 % Import behavior Data
-prompt = 'Enter the behavior data file name \n';
-behavior_file_name = input(prompt, 's'); 
-behaviorData = readtable(behavior_file_name);
+if ~(exist('behaviorData','var'))
+    prompt = 'Enter the behavior data file name \n';
+    behavior_file_name = input(prompt, 's'); 
+    behaviorData = readtable(behavior_file_name);
+end
 
 % Import fluoresence Data
 prompt = 'Enter the fluoresence data file name \n';
@@ -43,24 +48,56 @@ animal_num = input('What is the animal number? \n','s');
 %% Runs behavior_data_twofiber script and z-score script on each behavior
 for i = 1:length(behaviors)
 
-    %% Runs behavior two-fiber plots
+    %% Runs behavior plots
     behavior_name = behaviors(i);
-    behavior_twofiber_wdriver;
+    
+    % prompts user to select one or two fiber script
+    list = {'One fiber','Two fiber'};
+    [fiber_indx,tf1] = listdlg('PromptString',{'How many fibers did you use?'}...
+        ,'ListString',list);
+    if tf1 == 0 % catch no selection error
+        fprintf('**Please make a selection from the channels list to continue** /n');
+        break
+    end
+    if fiber_indx == 1
+        behavior_onefiber_wdriver;
+    end
+    if fiber_indx == 2
+        behavior_twofiber_wdriver;
+    end
+    
 
     %% Runs Z-score plots
     % Asks what channel(s) to analyze
-    list = {'fGreenLisosbestic','fGreenLred','fGreenLgreen','fGreenRisosbestic',...
-        'fGreenRred','fGreenRgreen','fRedLisosbestic','fRedLred','fRedLgreen',...
-        'fRedRisosbestic','fRedRred','fRedRgreen'};
-    [zscore_indx,tf] = listdlg('PromptString',{'Choose one or more channels to' ...
-        ' analyze for ' + string(behavior_name)}...
-        ,'ListString',list);
-    channels = {fGreenLisosbestic,fGreenLred,fGreenLgreen,fGreenRisosbestic,...
-        fGreenRred,fGreenRgreen,fRedLisosbestic,fRedLred,fRedLgreen,...
-        fRedRisosbestic,fRedRred,fRedRgreen};
-    if tf == 0 % catch no selection error
-        fprintf('**Please make a selection from the channels list to continue** /n');
-    end
+     if fiber_indx == 1
+        list = {'fGreenisosbestic','fGreenred','fGreengreen','fRedisosbestic',...
+            'fRedred','fRedgreen'};
+        [zscore_indx,tf] = listdlg('PromptString',{'Choose one or more channels to' ...
+            ' analyze for ' + string(behavior_name)}...
+            ,'ListString',list);
+        channels = {fGreenisosbestic,fGreenred,fGreengreen,fRedisosbestic,...
+            fRedred,fRedgreen};
+        if tf == 0 % catch no selection error
+            fprintf('**Please make a selection from the channels list to continue** /n');
+            break
+        end
+     end
+     
+     if fiber_indx == 2
+        list = {'fGreenLisosbestic','fGreenLred','fGreenLgreen','fGreenRisosbestic',...
+            'fGreenRred','fGreenRgreen','fRedLisosbestic','fRedLred','fRedLgreen',...
+            'fRedRisosbestic','fRedRred','fRedRgreen'};
+        [zscore_indx,tf] = listdlg('PromptString',{'Choose one or more channels to' ...
+            ' analyze for ' + string(behavior_name)}...
+            ,'ListString',list);
+        channels = {fGreenLisosbestic,fGreenLred,fGreenLgreen,fGreenRisosbestic,...
+            fGreenRred,fGreenRgreen,fRedLisosbestic,fRedLred,fRedLgreen,...
+            fRedRisosbestic,fRedRred,fRedRgreen};
+        if tf == 0 % catch no selection error
+            fprintf('**Please make a selection from the channels list to continue** /n');
+            break
+        end
+     end
     
     % Creates z-score plot for each selected channel
     for i = 1:length(zscore_indx)
