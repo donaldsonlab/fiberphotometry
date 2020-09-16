@@ -2,46 +2,48 @@
 % updated 9/10/20 by Anna
 
 %% To Hard code files/behaviors use this
-% Behavior file: 
-behavior_file_name = '1fiberbehaviortest.csv';
-behaviorData = readtable(behavior_file_name);
-
-% Fluoresence file:
-f_file_name = '1fibersignaltest.csv';
-fData = readtable(f_file_name);
-
-% Behaviors: 
-behaviors_input = 'Autogroom';
-behaviors = regexp(behaviors_input,', ','split');
-
-% Animal number:
-animal_num = 1234;
-
-% %% Imports Data
-% % Import behavior Data
-% prompt = 'Enter the behavior data file name \n';
-% behavior_file_name = input(prompt, 's'); 
+% % Behavior file: 
+% behavior_file_name = '1fiberbehaviortest.csv';
 % behaviorData = readtable(behavior_file_name);
 % 
-% % Import fluoresence Data
-% prompt = 'Enter the fluoresence data file name \n';
-% f_file_name = input(prompt, 's');
-% fData = readtable(f_file_name); 
+% % Fluoresence file:
+% f_file_name = '1fibersignaltest.csv';
+% fData = readtable(f_file_name);
 % 
-% % Import behaviors to analyze
-% unique_behaviors = unique(table2array(behaviorData(:,2)));
-% [behavior_indx,ok] = listdlg('Promptstring',{'Pick the behaviors to be ' ...
-%     'analyzed'}, 'Liststring', unique_behaviors);
-% if ok == 0 % catch no selection error
-%     fprintf('**Please make a selection from the behaviors list to continue** \n');
-% end
-% behaviors = [];
-% % puts selected behaviors into behaviors array
-% for i = 1:(length(behavior_indx))
-%     behaviors = [behaviors, unique_behaviors(behavior_indx(i))];
-% end
-% % Asks for animal number
-% animal_num = input('What is the animal number? \n','s');
+% % Behaviors: 
+% behaviors_input = 'Autogroom';
+% behaviors = regexp(behaviors_input,', ','split');
+% 
+% % Animal number:
+% animal_num = 1234;
+
+%% Imports Data
+% Import behavior Data
+if ~(exist('behaviorData','var'))
+    prompt = 'Enter the behavior data file name \n';
+    behavior_file_name = input(prompt, 's'); 
+    behaviorData = readtable(behavior_file_name);
+end
+
+% Import fluoresence Data
+prompt = 'Enter the fluoresence data file name \n';
+f_file_name = input(prompt, 's');
+fData = readtable(f_file_name); 
+
+% Import behaviors to analyze
+unique_behaviors = unique(table2array(behaviorData(:,2)));
+[behavior_indx,ok] = listdlg('Promptstring',{'Pick the behaviors to be ' ...
+    'analyzed'}, 'Liststring', unique_behaviors);
+if ok == 0 % catch no selection error
+    fprintf('**Please make a selection from the behaviors list to continue** \n');
+end
+behaviors = [];
+% puts selected behaviors into behaviors array
+for i = 1:(length(behavior_indx))
+    behaviors = [behaviors, unique_behaviors(behavior_indx(i))];
+end
+% Asks for animal number
+animal_num = input('What is the animal number? \n','s');
 
 %% Runs behavior_data_twofiber script and z-score script on each behavior
 for i = 1:length(behaviors)
