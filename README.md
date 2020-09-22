@@ -1,11 +1,34 @@
-# fiberphotometry
+# Donaldson Lab Fiberphotometry
+> This project is for performing analysis on animal fiberphotemetry and behavior data 
 
-In order to use the code:
-1. Obtain fiberphotometry data
-2. Use BORIS to score behavior and download raw data by clicking: observations -> export events -> tabular events -> select observations -> save as csv
-3. Run the BORIS_format script to convert raw BORIS data to behaviorData variable
-4. Run the behavior_driver which has a user interface that will guide you through the rest of the inputs
+In order to use this code you must have collected fiberphotometry data and behavior data collected using the behavior coding software BORIS (https://boris.readthedocs.io/en/latest/#behavioral-observation-research-interactive-software-boris-user-guide). This project currently generates plots marking behavioral occurances on raw fluoresence data (behavior_onefiber_wdriver and behavior_twofiber_wdriver), and produces a Z-score plot (Zscore_wdriver) which graphs average Z-score and SEM for all stacked behavioral occurances. BORIS_format can be used to parse and format raw output for use with the rest of the code. Once the behavior data is formatted, behavior_driver is the only code that must be run by the user (but all scripts must be downloaded). 
 
-Notes: 
-*make sure you have all scripts downloaded, and located in the same working directory
-*If you are only doing one or only doing two fiber, you will only need the respective script
+## Installation
+
+OS X & Linux:
+
+```sh
+git clone https://github.com/donaldsonlab/fiberphotometry.git
+```
+
+## To Use the Code
+1. Obtain fiberphotometry data (msec/day) 
+2. Download raw data from behavior scoring using BORIS by clicking: observations -> export events -> tabular events -> select observations -> save as csv
+3. Download all scripts in repository
+4. Run the BORIS_format script to convert raw BORIS data to behaviorData variable
+5. Run the behavior_driver which has a user interface that will guide you through the rest of the inputs
+
+## Release History
+
+* v1.0
+    * ADD: `behavior_driver.m`
+    * ADD: `behavior_twofiber_wdriver.m`
+    * ADD: `Zscore_wdriver.m`
+* v1.1
+    * ADD: `BORIS_format.m`
+    * ADD: `behavior_onefiber_wdriver.m`
+    * CHANGE: files updated to be compatible with change
+* v2.0
+    * CHANGE: Error messages added
+    * ADD: baseline printed on graph in `Zscore_wdriver.m`
+    * CHANGE: baseline selected from menu in `Zscore_wdriver.m`
