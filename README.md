@@ -1,7 +1,7 @@
 # Donaldson Lab Fiberphotometry
 > This project is for performing analysis on animal fiberphotemetry and behavior data 
 
-In order to use this code you must have collected fiberphotometry data and behavior data collected using the behavior coding software BORIS (https://boris.readthedocs.io/en/latest/#behavioral-observation-research-interactive-software-boris-user-guide). This project currently generates plots marking behavioral occurances on raw fluoresence data (behavior_onefiber_wdriver and behavior_twofiber_wdriver), and produces a Z-score plot (Zscore_wdriver) which graphs average Z-score and SEM for all stacked behavioral occurances. BORIS_format can be used to parse and format raw output for use with the rest of the code. Once the behavior data is formatted, behavior_driver is the only code that must be run by the user (but all scripts must be downloaded). 
+In order to use this code you must have collected fiberphotometry data and behavior data collected using the behavior coding software BORIS (https://boris.readthedocs.io/en/latest/#behavioral-observation-research-interactive-software-boris-user-guide). This project currently generates plots marking behavioral occurances on raw fluoresence data (behavior_onefiber_wdriver and behavior_twofiber_wdriver), and produces a Z-score plot (Zscore_wdriver) which graphs average Z-score and SEM for all stacked behavioral occurances. BORIS_format is used to parse and format raw output for use with the rest of the code. The behavior_driver is the only script that must be run by the user (but all scripts must be downloaded). 
 
 ## Installation
 
