@@ -1,13 +1,15 @@
 %% Creates Z-score plot for all behaviors 
-% updated 9/10/20 by Anna
+% updated 9/21/20 by Anna
+
+driver_version = 'v1.2';
 
 %% To Hard code files/behaviors use this
 % % Behavior file: 
-% behavior_file_name = '1fiberbehaviortest.csv';
+% behavior_file_name = '2020-04-09T16_04_47.csv';
 % behaviorData = readtable(behavior_file_name);
 % 
 % % Fluoresence file:
-% f_file_name = '1fibersignaltest.csv';
+% f_file_name = 'Test2020-04-09T16_04_46.csv';
 % fData = readtable(f_file_name);
 % 
 % % Behaviors: 
@@ -15,7 +17,7 @@
 % behaviors = regexp(behaviors_input,', ','split');
 % 
 % % Animal number:
-% animal_num = 1234;
+% animal_num = 'test';
 
 %% Imports Data
 % Import behavior Data
@@ -56,8 +58,7 @@ for i = 1:length(behaviors)
     [fiber_indx,tf1] = listdlg('PromptString',{'How many fibers did you use?'}...
         ,'ListString',list);
     if tf1 == 0 % catch no selection error
-        fprintf('**Please make a selection from the channels list to continue** /n');
-        break
+        error('Error: Make a selection from the channels list to continue /n')
     end
     if fiber_indx == 1
         behavior_onefiber_wdriver;
@@ -67,7 +68,7 @@ for i = 1:length(behaviors)
     end
     
 
-    %% Runs Z-score plots
+    %% Plots Z-score 
     % Asks what channel(s) to analyze
      if fiber_indx == 1
         list = {'fGreenisosbestic','fGreenred','fGreengreen','fRedisosbestic',...
@@ -94,8 +95,7 @@ for i = 1:length(behaviors)
             fGreenRred,fGreenRgreen,fRedLisosbestic,fRedLred,fRedLgreen,...
             fRedRisosbestic,fRedRred,fRedRgreen};
         if tf == 0 % catch no selection error
-            fprintf('**Please make a selection from the channels list to continue** /n');
-            break
+            error('Error: make a selection from the channels list to continue /n');
         end
      end
     
@@ -112,7 +112,7 @@ for i = 1:length(behaviors)
         elseif zscore_indx(i) == 3||6||9||12 % green
             fTimeChannel = fTimeGreen;
         else
-            fprintf('error assigning Time to channel');
+            error('Error: could not assign time to channel');
         end  
         % Runs script
         Zscore_wdriver;
@@ -120,5 +120,5 @@ for i = 1:length(behaviors)
     
     %% Clears variables for next run
     clearvars -except fData behaviorData behaviors behavior_file_name ...
-        animal_num unique_behaviors
+        animal_num unique_behaviors baseline_start_sec baseline_stop_sec
 end
