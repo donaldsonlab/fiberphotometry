@@ -1,7 +1,7 @@
 %% Creates Z-score plot for all behaviors 
-% updated 9/21/20 by Anna
+% updated 9/22/20 by Anna
 
-driver_version = 'v1.2';
+driver_version = 'v1.3';
 
 %% To Hard code files/behaviors use this
 % % Behavior file: 
@@ -19,18 +19,33 @@ driver_version = 'v1.2';
 % % Animal number:
 % animal_num = 'test';
 
+%% Converts BORIS Output to behaviorData variable
+dlgTitle    = 'Behavior Data Format';
+dlgQuestion = 'Have you already converted BORIS output to behaviorData?';
+choice = questdlg(dlgQuestion,dlgTitle,'Yes','No', 'Yes');
+tf = strcmp(choice,'Yes');
+if tf == 0 % if choice is 'No'
+    BORIS_format;
+end
+
 %% Imports Data
 % Import behavior Data
 if ~(exist('behaviorData','var'))
-    prompt = 'Enter the behavior data file name \n';
-    behavior_file_name = input(prompt, 's'); 
+    prompt = {'Enter the behavior data file name'};
+    dlgtitle = 'Input Behavior Data File ';
+    dims = [1 35];
+    behavior_file_name_cell = inputdlg(prompt,dlgtitle,dims);
+    behavior_file_name = behavior_file_name_cell{1,1};
     behaviorData = readtable(behavior_file_name);
 end
 
 % Import fluoresence Data
-prompt = 'Enter the fluoresence data file name \n';
-f_file_name = input(prompt, 's');
-fData = readtable(f_file_name); 
+    prompt = {'Enter the fluoresence data file name'};
+    dlgtitle = 'Input Fluoresence Data File ';
+    dims = [1 35];
+    f_file_name_cell = inputdlg(prompt,dlgtitle,dims);
+    f_file_name = f_file_name_cell{1,1};
+    fData = readtable(f_file_name); 
 
 % Import behaviors to analyze
 unique_behaviors = unique(table2array(behaviorData(:,2)));
@@ -45,7 +60,12 @@ for i = 1:(length(behavior_indx))
     behaviors = [behaviors, unique_behaviors(behavior_indx(i))];
 end
 % Asks for animal number
-animal_num = input('What is the animal number? \n','s');
+prompt = {'What is the animal number?'};
+dlgtitle = 'Input Animal Number';
+dims = [1 35];
+animal_num_cell = inputdlg(prompt,dlgtitle,dims);
+animal_num = animal_num_cell{1,1};
+fData = readtable(f_file_name);
 
 %% Runs behavior_data_twofiber script and z-score script on each behavior
 for i = 1:length(behaviors)
@@ -58,7 +78,7 @@ for i = 1:length(behaviors)
     [fiber_indx,tf1] = listdlg('PromptString',{'How many fibers did you use?'}...
         ,'ListString',list);
     if tf1 == 0 % catch no selection error
-        error('Error: Make a selection from the channels list to continue /n')
+        error('Error: Make a selection from the channels list to continue')
     end
     if fiber_indx == 1
         behavior_onefiber_wdriver;
@@ -79,8 +99,7 @@ for i = 1:length(behaviors)
         channels = {fGreenisosbestic,fGreenred,fGreengreen,fRedisosbestic,...
             fRedred,fRedgreen};
         if tf == 0 % catch no selection error
-            fprintf('**Please make a selection from the channels list to continue** /n');
-            break
+            error('Error: make a selection from the channels list to continue');
         end
      end
      
@@ -95,7 +114,7 @@ for i = 1:length(behaviors)
             fGreenRred,fGreenRgreen,fRedLisosbestic,fRedLred,fRedLgreen,...
             fRedRisosbestic,fRedRred,fRedRgreen};
         if tf == 0 % catch no selection error
-            error('Error: make a selection from the channels list to continue /n');
+            error('Error: make a selection from the channels list to continue');
         end
      end
     

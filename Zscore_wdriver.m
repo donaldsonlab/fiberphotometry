@@ -1,6 +1,7 @@
 %% Plots zscores for each behavior occurance (Asks for channel)
 % UPDATE THIS EACH NEW VERSION (date of update):
-zversion = 'v1.2'; 
+% updated 9/22/20 by Anna
+zversion = 'v1.3'; 
 
 
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTimeChannel
@@ -108,8 +109,6 @@ curve2 = curve2.';
 %% Plotting
 x = [-3:(8/(minlenB)):+5];  % holds minlenB points between -2 and 5
 
-% prompt = 'What would you like to title your graph? \n';
-% graph_title = input(prompt,'s');
 graph_title = string(behavior_name) + ' Animal no. '+ animal_num + ...
     ' Channel: ' + channel_name + ' ' + zversion;
 
