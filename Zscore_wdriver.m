@@ -1,16 +1,33 @@
 %% Plots zscores for each behavior occurance (Asks for channel)
 % UPDATE THIS EACH NEW VERSION (date of update):
-zversion = 'v1.1'; 
+zversion = 'v1.2'; 
 
 
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTimeChannel
 
 % Determining Baseline
-baseline_prompt = 'Enter the range for calculating the baseline in seconds before behavior \n separated by a space (e.g. 3 2 = from 3 to 2 seconds before behavior) \n';
-    % when behavior occurs at time 0
-baseline_idxs = split(input(baseline_prompt, 's')); 
-baseline_start_sec = str2double(baseline_idxs{1}); 
-baseline_stop_sec = str2double(baseline_idxs{2}); 
+if ~(exist('baseline_start_sec','var')) || ~(exist('baseline_stop_sec','var'))
+    baselinelist = {'4-3 seconds before behavior','3-2 seconds before behavior',...
+    '2-1 seconds before behavior', '1-0 seconds before behavior'};
+    [baseline_indx,tf] = listdlg('PromptString',{'What baseline range would you like to use?'}...
+        ,'ListString',baselinelist);
+    if tf == 0 % catch no selection error
+        error('Error: make a selection of baseline range to continue /n');
+    end
+    if baseline_indx == 1
+        baseline_start_sec = 4;
+        baseline_stop_sec = 3; 
+    elseif baseline_indx == 2
+        baseline_start_sec = 3;
+        baseline_stop_sec = 2; 
+    elseif baseline_indx == 3
+        baseline_start_sec = 2;
+        baseline_stop_sec = 1; 
+    elseif baseline_indx == 4
+        baseline_start_sec = 1;
+        baseline_stop_sec = 0; 
+    end
+end
 
 % Initialize arrays
 baseline_start = zeros(1,length(behaviorT)); % # sec before bout (start baseline)
@@ -113,6 +130,15 @@ xline(0,':','LineWidth',2);
 % SEM lines
 plot(x,curve1,'r',0,0.5,'LineWidth',2);
 plot(x,curve2,'r',0,0.5,'LineWidth',2);
+
+% Marks baseline range with grey bar
+if baseline_start_sec < 4
+    basline_range = patch([-baseline_stop_sec -baseline_start_sec -baseline_start_sec ...
+        -baseline_stop_sec],[min(ylim) min(ylim) max(ylim) max(ylim)],[17 17 17]/255);
+    alpha(.01)
+    basline_range.FaceAlpha = 0.2;
+end
+
 
 %% Print Z-score Summary Values
 max_zscore = num2str(max(zscore_channel_avg));
