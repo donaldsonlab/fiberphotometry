@@ -15,8 +15,7 @@ git clone https://github.com/donaldsonlab/fiberphotometry.git
 1. Obtain fiberphotometry data (msec/day) 
 2. Download raw data from behavior scoring using BORIS by clicking: observations -> export events -> tabular events -> select observations -> save as csv
 3. Download all scripts in repository
-4. Run the BORIS_format script to convert raw BORIS data to behaviorData variable
-5. Run the behavior_driver which has a user interface that will guide you through the rest of the inputs
+4. Run the behavior_driver which has a user interface that will guide you through the rest of the inputs
 
 ## Release History
 
@@ -32,3 +31,6 @@ git clone https://github.com/donaldsonlab/fiberphotometry.git
     * CHANGE: Error messages added
     * ADD: baseline printed on graph in `Zscore_wdriver.m`
     * CHANGE: baseline selected from menu in `Zscore_wdriver.m`
+* v1.3
+   * CHANGE: `behavior_driver` runs `BORIS_format` (so they do not need to be run separately) 
+   * CHANGE: user inputs now formatted in inputdlg windows
