@@ -28,7 +28,7 @@ git clone https://github.com/donaldsonlab/fiberphotometry.git
     * ADD: `BORIS_format.m`
     * ADD: `behavior_onefiber_wdriver.m`
     * CHANGE: files updated to be compatible with change
-* v2.0
+* v1.2
     * CHANGE: Error messages added
     * ADD: baseline printed on graph in `Zscore_wdriver.m`
     * CHANGE: baseline selected from menu in `Zscore_wdriver.m`
