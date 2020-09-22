@@ -2,6 +2,8 @@
 % Written 9/16/20 by Lisa Hiura
 % Editted 9/16/20 by Anna McTigue
 
+borisformat_verion = 'v1.2';
+
 %% Imports Data
 % % Import behavior Data
 prompt = 'Enter the BORIS output file name \n';
