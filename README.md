@@ -12,11 +12,11 @@ git clone https://github.com/donaldsonlab/fiberphotometry.git
 ```
 
 ## To Use the Code
-1. Obtain `fiberphotometry data` (msec/day) 
-2. Score behavior using BOIRS with the events recorded in `seconds`
+1. Obtain fiberphotometry data (msec/day) 
+2. Score behavior using BORIS with the events recorded in `seconds`
 3. Download raw data from behavior scoring using BORIS by clicking: `observations -> export events -> tabular events -> select observations -> save as csv`
-3. Download all scripts in repository
-4. Run the `behavior_driver` which has a user interface that will guide you through the rest of the inputs
+4. Download all scripts in repository
+5. Run the `behavior_driver` which has a user interface that will guide you through the rest of the inputs
 
 ## Release History
 
