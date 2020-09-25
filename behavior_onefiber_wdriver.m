@@ -2,7 +2,7 @@
 % written by Katie Gallagher Edited by Kathleen Murphy & Anna McTigue
 
 % UPDATE THIS EACH NEW VERSION (date of update):
-onefiberversion = 'v1.3'; 
+onefiberversion = 'v1.4'; 
 
 format long
 %% Read Tables
