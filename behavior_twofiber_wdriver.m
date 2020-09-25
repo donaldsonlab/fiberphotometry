@@ -2,7 +2,7 @@
 % written by Katie Gallagher Edited by Kathleen Murphy & Anna McTigue
 
 % UPDATE THIS EACH NEW VERSION (date of update):
-twofiberversion = 'v1.3'; 
+twofiberversion = 'v1.4'; 
 
 format long
 %% Read Tables

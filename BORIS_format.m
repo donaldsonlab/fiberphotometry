@@ -2,7 +2,7 @@
 % Written 9/16/20 by Lisa Hiura
 % Editted 9/22/20 by Anna McTigue
 
-borisformat_verion = 'v1.3';
+borisformat_verion = 'v1.4';
 
 %% Imports Data
 % Import Raw BORIS Data
@@ -28,7 +28,7 @@ behaviorData.Properties.VariableNames = {'Time_in_Video' 'Behavior' 'Status'};
 behaviorData(ismember(behaviorData.Status,'STOP'),:)=[];
 
 % Transform time in sec to msec
-behaviorData.Time_in_Video = behaviorData.Time_in_Video ./ 1000;
+behaviorData.Time_in_Video = behaviorData.Time_in_Video .* 1000;
  
 % Move the Status column over 1 to the right (should now be column 4)
 behaviorData(:,4) = [behaviorData(:,3)];

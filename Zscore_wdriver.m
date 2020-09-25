@@ -1,7 +1,7 @@
 %% Plots zscores for each behavior occurance (Asks for channel)
 % UPDATE THIS EACH NEW VERSION (date of update):
 % updated 9/22/20 by Anna
-zversion = 'v1.3'; 
+zversion = 'v1.4'; 
 
 
 %% Determines indices of behaviorT, 2sec before, & 5sec after in fTimeChannel

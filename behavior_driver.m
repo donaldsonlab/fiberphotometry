@@ -1,7 +1,7 @@
 %% Creates Z-score plot for all behaviors 
 % updated 9/22/20 by Anna
 
-driver_version = 'v1.3';
+driver_version = 'v1.4';
 
 %% To Hard code files/behaviors use this
 % % Behavior file: 
