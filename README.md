@@ -35,3 +35,5 @@ git clone https://github.com/donaldsonlab/fiberphotometry.git
 * v1.3
    * CHANGE: `behavior_driver` runs `BORIS_format` (so they do not need to be run separately) 
    * CHANGE: user inputs now formatted in inputdlg windows
+* v1.4
+   * CHANGE: fix conversion bug in `BORIS_format`
