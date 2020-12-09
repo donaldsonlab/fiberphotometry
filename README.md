@@ -36,7 +36,7 @@ git clone https://github.com/anmc9115/swe4s_final_project_am_cp_js.git
 
 ## Release History
 
-* v1.0
+* v2.0
     * ADD: `fpho_setup.py` library that parses fpho data, contains analysis
     * ADD: functional and unit testing: `fpho_ftest_driver.py`, `fpho_driver.py`, `ftests_fpho_setup.txt`, `test_fpho_driver.sh`, `test_fpho_setup.py`, `unittest_fpho_setup.py`
     * ADD: `behavior_setup.py` library that parses behavior data, contains analysis
