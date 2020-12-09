@@ -1,0 +1,63 @@
+# USER DIRECTIONS ------------------------------------------
+# Update the following parameters for your analysis
+# When complete, run this file by entering the following 
+# command into the terminal:
+# python fpho_config.py --config config.yml
+# ----------------------------------------------------------
+
+# REQUIRED INPUTS ------------------------------------------
+#  Name/file path for file containing fiberpho data from Bonsai (string)
+input_filename: "SynchronyData/FiberPhoSig2020-10-12T15_30_41.csv"
+
+# Name for output files including summary csv and plots 
+# Do not include a file type (e.g. "my_file_name")
+output_filename: "my_file_name"
+
+# 1-fiber or 2-fiber input data (int)
+n_fibers: 1
+
+# Column index for green 1 (int)
+f1greencol: 3
+
+# Column index for green 2 (int)
+f2greencol: None
+
+#  Number of the animal corresponding to fluoresence data (int)
+animal_ID: "1234" 
+
+# Date of data collection (string, form: YYYY-MM-DD)           
+exp_date: "2020-11-22" 
+
+# Brief explantation of experiment (string)
+exp_desc: "my experiment was about ..."
+
+# To write an excel file of fiberpho data, set True (otherwise False)
+write_xlsx: False
+
+# To plot the raw signal trace, set True (otherwise False)
+plot_raw_signal: True
+
+# To plot the isosbestic fit, set True (otherwise False)
+plot_iso_fit: False
+
+# To plot the fitted exponent, set True (otherwise False)
+plot_fit_exp: False
+
+# ----------------------------------------------------------
+
+# BEHAVIOR ANALYSIS ----------------------------------------
+# If not using, leave import as False and other fields empty
+
+# To import behavior data, set True (otherwise False)
+import_behavior: False
+
+# Name/file path of BORIS file containing behavior data (string)
+BORIS_file:
+
+# Name/file path of timestamp file corresponding to video (string)
+timestamp_file:
+
+# To plot the z-score analysis, set True (otherwise False)
+plot_zscore: False
+
+#------------------------------------------------------------

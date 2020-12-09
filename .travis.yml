@@ -1,0 +1,25 @@
+language: python
+  
+before_install:
+    - wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    - bash Miniconda3-latest-Linux-x86_64.sh -b
+    - . /home/travis/miniconda3/etc/profile.d/conda.sh
+    - conda update --yes conda
+    - conda config --add channels r
+    - conda create --yes -n test
+    - conda activate test
+    - conda install --yes python=3.6
+    - conda install -y pycodestyle
+    - conda install --yes numpy
+    - conda install --yes matplotlib
+    - conda install --yes pandas
+    - conda install --yes scipy
+    - conda install --yes openpyxl
+
+script:
+    - pycodestyle Python/fpho_setup.py
+    - pycodestyle Python/behavior_setup.py
+    - pycodestyle Python/fpho_config.py
+    - pycodestyle Python/test_fpho_setup.py 
+    - python Python/test_fpho_setup.py < Python/unittest_fpho_setup.txt
+    - bash Python/test_fpho_driver.sh

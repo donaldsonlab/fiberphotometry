@@ -1,0 +1,91 @@
+Observation id,2020-04-09T16_04_47,,,,,,,
+,,,,,,,,
+Media file(s),,,,,,,,
+,,,,,,,,
+Player #1,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,,,,,,,
+,,,,,,,,
+Observation date,2020-05-24 13:12:33,,,,,,,
+,,,,,,,,
+Description,,,,,,,,
+,,,,,,,,
+Time offset (s),0.0,,,,,,,
+,,,,,,,,
+independent variables,,,,,,,,
+variable,value,,,,,,,
+,,,,,,,,
+Time,Media file path,Total length,FPS,Subject,Behavior,Behavioral category,Comment,Status
+0.533,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+1.200,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+2.467,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+3.700,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+5.400,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+6.500,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+7.067,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+8.767,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+9.333,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+17.233,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+18.133,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+39.100,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+40.800,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+52.200,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+57.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+86.833,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+92.267,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+104.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+108.000,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Clap,,,POINT
+108.333,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+110.467,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+115.100,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Clap,,,POINT
+115.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+115.333,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+126.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+127.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+130.333,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+132.800,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+133.700,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Autogroom,,,POINT
+158.000,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+159.367,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Clap,,,POINT
+159.567,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+160.567,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+168.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+168.600,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Autogroom,,,POINT
+171.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+172.467,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Autogroom,,,POINT
+175.967,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+178.933,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+182.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+182.333,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Autogroom,,,POINT
+189.233,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+191.233,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+191.367,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+191.667,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+192.800,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+192.967,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+194.133,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+194.133,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+194.167,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+194.367,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+194.700,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+194.733,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+195.267,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+195.300,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+195.533,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+197.133,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Other Behavior,,,POINT
+197.167,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+197.267,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+199.467,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+201.400,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+202.500,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+203.733,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+210.067,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+211.200,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+212.333,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+213.067,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Clap,,,POINT
+213.100,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+214.800,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+215.833,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+217.033,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+220.000,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+221.167,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
+252.200,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Walking,,,POINT
+253.433,/Users/Anna/Desktop/Actual video2020-04-09T16_04_47.avi,259.500,30.0,,Quiet,,,POINT
