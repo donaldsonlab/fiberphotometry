@@ -1,39 +1,44 @@
-# Donaldson Lab Fiberphotometry
-> This project is for performing analysis on animal fiberphotemetry and behavior data 
+# Donaldson Lab Fiberphotometry Analysis
+> This software is for performing analysis on animal fiberphotemetry and behavior data 
 
-In order to use this code you must have collected fiberphotometry data and behavior data collected using the behavior coding software BORIS (https://boris.readthedocs.io/en/latest/#behavioral-observation-research-interactive-software-boris-user-guide). This project currently generates plots marking behavioral occurances on raw fluoresence data (behavior_onefiber_wdriver and behavior_twofiber_wdriver), and produces a Z-score plot (Zscore_wdriver) which graphs average Z-score and SEM for all stacked behavioral occurances. BORIS_format is used to parse and format raw output for use with the rest of the code. The behavior_driver is the only script that must be run by the user (but all scripts must be downloaded). 
+In order to use this code you must have collected fiberphotometry data using `Bonsai` and behavior data using the behavior coding software `BORIS` (https://boris.readthedocs.io/en/latest/#behavioral-observation-research-interactive-software-boris-user-guide). 
+
+### Note: this software is currenlty optimized for GcAMP (or other green fluoraphores)
+
 
 ## Installation
 
-OS X & Linux:
+Open a terminal and navigate to the working directory where you would like to store and use this software. Run the following command to download the code from this repository into that directory. 
 
 ```sh
-git clone https://github.com/donaldsonlab/fiberphotometry.git
+git clone https://github.com/anmc9115/swe4s_final_project_am_cp_js.git
 ```
 
 ## To Use the Code
-1. Obtain fiberphotometry data (msec/day) 
-2. Score behavior using BORIS with the events recorded in `seconds`
-3. Download raw data from behavior scoring using BORIS by clicking: `observations -> export events -> tabular events -> select observations -> save as csv`
-4. Download all scripts in repository
-5. Run the `behavior_driver` which has a user interface that will guide you through the rest of the inputs
+1. Obtain fiberphotometry data `msec/day`
+2. If analyzing behavior, score behavior using BORIS with the events recorded in `seconds`
+3. If analyzing behavior, download raw data from behavior scoring using BORIS by clicking: `observations -> export events -> tabular events -> select observations -> save as csv`
+4. Download all analysis software as described in the `Installation` section above
+5. Open and edit the `config.yml` file with the parameters specific to your experiment. You will need to edit this file each time you want to run the code.
+6. In the command line, run the following command to execute the code:
+      `python fpho_config.py --config config.yml`
+7. A summary excel file along with any plots from analysis will be output to the working directory.
+
+## Example Plots
+### Raw Signal Trace
+<center><img src="Python/ExamplePlots/Ex_RawSig.png" width="300"/></center>
+
+### Normalized Signal to Isosbestic
+<center><img src="Python/ExamplePlots/Ex_NormIso.png" width="300"/></center>
+
+### Normalized Signal to Biexponential Fit
+<center><img src="Python/ExamplePlots/Ex_NormExp.png" width="300"/></center>
 
 ## Release History
 
 * v1.0
-    * ADD: `behavior_driver.m`
-    * ADD: `behavior_twofiber_wdriver.m`
-    * ADD: `Zscore_wdriver.m`
-* v1.1
-    * ADD: `BORIS_format.m`
-    * ADD: `behavior_onefiber_wdriver.m`
-    * CHANGE: files updated to be compatible with change
-* v1.2
-    * CHANGE: Error messages added
-    * ADD: baseline printed on graph in `Zscore_wdriver.m`
-    * CHANGE: baseline selected from menu in `Zscore_wdriver.m`
-* v1.3
-   * CHANGE: `behavior_driver` runs `BORIS_format` (so they do not need to be run separately) 
-   * CHANGE: user inputs now formatted in inputdlg windows
-* v1.4
-   * CHANGE: fix conversion bug in `BORIS_format`
+    * ADD: `fpho_setup.py` library that parses fpho data, contains analysis
+    * ADD: functional and unit testing: `fpho_ftest_driver.py`, `fpho_driver.py`, `ftests_fpho_setup.txt`, `test_fpho_driver.sh`, `test_fpho_setup.py`, `unittest_fpho_setup.py`
+    * ADD: `behavior_setup.py` library that parses behavior data, contains analysis
+    * ADD: `config.yml` file manipulated by user to run the software
+    * ADD: Example plots, sample and test data
