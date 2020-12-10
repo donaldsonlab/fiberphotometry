@@ -13,6 +13,10 @@ Open a terminal and navigate to the working directory where you would like to st
 ```sh
 git clone https://github.com/anmc9115/swe4s_final_project_am_cp_js.git
 ```
+Once you have cloned the repository, run the following command to install the conda environment and all program dependencies.
+```sh
+conda env create -f environment.yml
+```
 
 ## To Use the Code
 1. Obtain fiberphotometry data `msec/day`
