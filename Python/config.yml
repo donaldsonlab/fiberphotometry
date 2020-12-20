@@ -7,20 +7,23 @@
 
 # REQUIRED INPUTS ------------------------------------------
 #  Name/file path for file containing fiberpho data from Bonsai (string)
-input_filename: "SynchronyData/FiberPhoSig2020-10-12T15_30_41.csv"
+input_filename: "SampleData/Interleaved.csv"
 
 # Name for output files including summary csv and plots 
 # Do not include a file type (e.g. "my_file_name")
 output_filename: "my_file_name"
 
-# 1-fiber or 2-fiber input data (int)
-n_fibers: 1
+# Column index for green 1 (int between 3 and 6)
+f1greencol: 5
 
-# Column index for green 1 (int)
-f1greencol: 3
+# Column index for green 1 (int between 3 and 6)
+f1redcol: 3
 
-# Column index for green 2 (int)
-f2greencol: None
+# Column index for green 2 (int between 3 and 6) (enter 'None' if one fiber)
+f2greencol: 6
+
+# Column index for green 1 (int between 3 and 6) (enter 'None' if one fiber)
+f2redcol: 4
 
 #  Number of the animal corresponding to fluoresence data (int)
 animal_ID: "1234" 
@@ -31,17 +34,20 @@ exp_date: "2020-11-22"
 # Brief explantation of experiment (string)
 exp_desc: "my experiment was about ..."
 
+#To import a new data file, set True (otherwise False)
+import_new: True
+
 # To write an excel file of fiberpho data, set True (otherwise False)
-write_xlsx: False
+write_xlsx: True
 
 # To plot the raw signal trace, set True (otherwise False)
-plot_raw_signal: True
+plot_raw_signal: False
 
-# To plot the isosbestic fit, set True (otherwise False)
-plot_iso_fit: False
+all_signals: [f1GreenGreen, f1RedRed, f2GreenGreen, f2RedRed]
 
+all_references: [f1GreenIso, f2RedIso, f2GreenIso, f2RedIso]
 # To plot the fitted exponent, set True (otherwise False)
-plot_fit_exp: False
+plot_fit_exp: True
 
 # ----------------------------------------------------------
 

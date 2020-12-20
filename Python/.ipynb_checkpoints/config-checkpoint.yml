@@ -1,0 +1,69 @@
+# USER DIRECTIONS ------------------------------------------
+# Update the following parameters for your analysis
+# When complete, run this file by entering the following 
+# command into the terminal:
+# python fpho_config.py --config config.yml
+# ----------------------------------------------------------
+
+# REQUIRED INPUTS ------------------------------------------
+#  Name/file path for file containing fiberpho data from Bonsai (string)
+input_filename: "SampleData/Interleaved.csv"
+
+# Name for output files including summary csv and plots 
+# Do not include a file type (e.g. "my_file_name")
+output_filename: "my_file_name"
+
+# Column index for green 1 (int between 3 and 6)
+f1greencol: 5
+
+# Column index for green 1 (int between 3 and 6)
+f1redcol: 3
+
+# Column index for green 2 (int between 3 and 6) (enter 'None' if one fiber)
+f2greencol: 6
+
+# Column index for green 1 (int between 3 and 6) (enter 'None' if one fiber)
+f2redcol: 4
+
+#  Number of the animal corresponding to fluoresence data (int)
+animal_ID: "1234" 
+
+# Date of data collection (string, form: YYYY-MM-DD)           
+exp_date: "2020-11-22" 
+
+# Brief explantation of experiment (string)
+exp_desc: "my experiment was about ..."
+
+#To import a new data file, set True (otherwise False)
+import_new: True
+
+# To write an excel file of fiberpho data, set True (otherwise False)
+write_xlsx: True
+
+# To plot the raw signal trace, set True (otherwise False)
+plot_raw_signal: False
+
+all_signals: [f1GreenGreen, f1RedRed, f2GreenGreen, f2RedRed]
+
+all_references: [f1GreenIso, f2RedIso, f2GreenIso, f2RedIso]
+# To plot the fitted exponent, set True (otherwise False)
+plot_fit_exp: True
+
+# ----------------------------------------------------------
+
+# BEHAVIOR ANALYSIS ----------------------------------------
+# If not using, leave import as False and other fields empty
+
+# To import behavior data, set True (otherwise False)
+import_behavior: False
+
+# Name/file path of BORIS file containing behavior data (string)
+BORIS_file:
+
+# Name/file path of timestamp file corresponding to video (string)
+timestamp_file:
+
+# To plot the z-score analysis, set True (otherwise False)
+plot_zscore: False
+
+#------------------------------------------------------------
