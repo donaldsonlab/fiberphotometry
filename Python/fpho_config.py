@@ -34,16 +34,19 @@ def main():
     f.close()
 
     # Generate the dataframe with data
-    fpho_df = fpho_setup.import_fpho_data(input_filename=(
+    if config['import_new'] is True:
+        fpho_df = fpho_setup.import_fpho_data(input_filename=(
                                               config['input_filename']),
                                           output_filename=(
                                               config['output_filename']),
-                                          n_fibers=(
-                                              config['n_fibers']),
                                           f1greencol=(
                                               config['f1greencol']),
+                                          f1redcol=(
+                                              config['f1redcol']),
                                           f2greencol=(
                                               config['f2greencol']),
+                                          f2redcol=(
+                                              config['f2redcol']),
                                           animal_ID=(
                                               config['animal_ID']),
                                           exp_date=(
@@ -52,18 +55,15 @@ def main():
                                               config['exp_desc']),
                                           write_xlsx=(
                                                config['write_xlsx']))
-
+    else:
+        fpho_df=pd.read_csv(config['output_filename'] + '_Summary.csv')
     # Plot raw signal if specified
     if config['plot_raw_signal'] is True:
-        fpho_setup.raw_signal_trace(fpho_df, config['output_filename'])
-
-    # Plots isosbestic fit if specified
-    if config['plot_iso_fit'] is True:
-        fpho_setup.plot_isosbestic_norm(fpho_df, config['output_filename'])
+        fpho_df=fpho_setup.raw_signal_trace(fpho_df)
 
     # Plots fitted exponent if specified
     if config['plot_fit_exp'] is True:
-        fpho_setup.plot_fitted_exp(fpho_df, config['output_filename'])
+        fpho_data=fpho_setup.plot_fitted_exp(fpho_df,                                   output_filename=config['output_filename'],                         signals=config['all_signals'],                                     references=config['all_references'])
 
     # Imports behavior data if specified
     behaviorData = pd.DataFrame()
