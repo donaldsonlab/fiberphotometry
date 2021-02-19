@@ -6,12 +6,15 @@
 # ----------------------------------------------------------
 
 # REQUIRED INPUTS ------------------------------------------
+#To import a new fiberphotometry data file, set True (otherwise False)
+import_new: False
+
 #  Name/file path for file containing fiberpho data from Bonsai (string)
-input_filename: "SampleData/Interleaved.csv"
+input_filename: "Fiberpho/mPFC synchrony/20201221 2 weeks paired/3.3739x3904/FiberPhoSig2020-12-19T12_20_17.csv"
 
 # Name for output files including summary csv and plots 
 # Do not include a file type (e.g. "my_file_name")
-output_filename: "my_file_name"
+output_filename: "2_weeks_3739_3904"
 
 # Column index for green 1 (int between 3 and 6)
 f1greencol: 5
@@ -19,35 +22,43 @@ f1greencol: 5
 # Column index for green 1 (int between 3 and 6)
 f1redcol: 3
 
-# Column index for green 2 (int between 3 and 6) (enter 'None' if one fiber)
+#Column index for green 2 (int between 3 and 6) (enter 'None' if one fiber)
 f2greencol: 6
 
 # Column index for green 1 (int between 3 and 6) (enter 'None' if one fiber)
 f2redcol: 4
 
 #  Number of the animal corresponding to fluoresence data (int)
-animal_ID: "1234" 
+animal_ID: "3739 3904"
 
 # Date of data collection (string, form: YYYY-MM-DD)           
-exp_date: "2020-11-22" 
+exp_date: "2020-1-21" 
 
 # Brief explantation of experiment (string)
-exp_desc: "my experiment was about ..."
+exp_desc: "PFC Sync"
 
-#To import a new data file, set True (otherwise False)
-import_new: True
+##To reload data that's been previously analyzed
+reload_data: True
+
+#Summary files to import
+reload_filenames: ["initial_pairings_3739_3754_Summary.csv", "initial_pairings_3737_3743_Summary.csv"]
 
 # To write an excel file of fiberpho data, set True (otherwise False)
-write_xlsx: True
+write_xlsx: False
 
 # To plot the raw signal trace, set True (otherwise False)
 plot_raw_signal: False
 
-all_signals: [f1GreenGreen, f1RedRed, f2GreenGreen, f2RedRed]
+# which channels are you interested in analyzing
+# options [f1GreenGreen, f1GreenIso, f2GreenGreen, f2GreenIso, f1RedRed, f1RedIso, f2RedRed, f2RedIso] 
+all_signals: [f1GreenGreen, f2GreenGreen]
+ 
+#which channels will be used for motion correction for the above channels
+# options [f1GreenGreen, f1GreenIso, f2GreenGreen, f2GreenIso, f1RedRed, f1RedIso, f2RedRed, f2RedIso] 
+all_references: [f1GreenIso, f2GreenIso]
 
-all_references: [f1GreenIso, f2RedIso, f2GreenIso, f2RedIso]
-# To plot the fitted exponent, set True (otherwise False)
-plot_fit_exp: True
+# To normalize your data using a reference and biexponential fits, set True (otherwise False)
+normalize_data: True
 
 # ----------------------------------------------------------
 
@@ -58,12 +69,29 @@ plot_fit_exp: True
 import_behavior: False
 
 # Name/file path of BORIS file containing behavior data (string)
-BORIS_file:
+BORIS_file: "Fiberpho/mPFC synchrony/20201221 2 weeks paired/3.3739x3904/Beh2020-12-19T12_20_17.csv"
 
-# Name/file path of timestamp file corresponding to video (string)
-timestamp_file:
+plot_behavior: False
 
 # To plot the z-score analysis, set True (otherwise False)
 plot_zscore: False
 
+zscore_behs: ["Clap_Alone", "Clap_Together"]
+
+fourier_transform: False
+
 #------------------------------------------------------------
+
+# SYNCHRONY ANALYSIS ----------------------------------------
+
+#To run a pearson's correlation between two fibers from the same trial, set True (otherwise False)
+within_trial_pearsons: False
+
+# Add the pairs of channels you would like to compare in synchrony
+channels: [[f1GreenGreen, f2GreenGreen]]
+
+#To run a pearson's correlation between two fibers from the same trial only while animals are doing a specific behavior, set True (otherwise False)
+behavior_specific_pearsons: True
+
+#Add each behavior you would like to put through analysis, to combine two different behaviors add them to the same list
+behaviors: [['together'], ['seperate']]

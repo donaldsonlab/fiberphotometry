@@ -13,16 +13,16 @@ import numpy as np
 import matplotlib.pyplot as plt
 import datetime
 from scipy.optimize import curve_fit
+from scipy import stats
 import csv
 import plotly.graph_objects as go
 
 driver_version = 'v2.0'
 
 
-def import_fpho_data(input_filename, output_filename,                          f1greencol, 
+def import_fpho_data(input_filename, output_filename, f1greencol, 
                      f1redcol, f2greencol, f2redcol,
-                     animal_ID, exp_date, exp_desc,
-                     write_xlsx):
+                     animal_ID, exp_date, exp_desc):
     """Takes a file name, returns a dataframe of parsed data
 
         Parameters
@@ -78,11 +78,11 @@ def import_fpho_data(input_filename, output_filename,                          f
         f1redcol = int(f1redcol)
     except ValueError:
         print("\nError: f1green or f1red column index not entered as integer")
-        sys.exit(1)
+        sys.exit()
 
     if (f1greencol == f1redcol) or (f1greencol == f2greencol) or (f1greencol == f2redcol) or (f2greencol == f1redcol) or (f2greencol == f2redcol) or (f1redcol == f2redcol):
         print("\nThe same column index has been assigned to two different colors or fibers.\n")
-        sys.exit
+        sys.exit()
 
     if f2greencol is not None:
 
@@ -108,123 +108,132 @@ def import_fpho_data(input_filename, output_filename,                          f
         print("Could not access file: " + input_filename)
         sys.exit(2)
     
-    #start time at zero and converto minutes
-    file['Timestamp']=(file['Timestamp']-file['Timestamp'][0])/60000
+    #start time at zero
+    file['Timestamp']=(file['Timestamp']-file['Timestamp'][0])
     length=len(file['Flags'])-1
     extras=length%3
-    min=int((length-extras)/3)
+    min=int((length-extras)/3)-1
+    start_idx=300
     #create a dictionary with parsed data    
-    data_dict = { 'animalID': [animal_ID], 'date': [exp_date],
-             'description': [exp_desc],
-             'fTimeIso': file[file["Flags"] == 17].iloc[0:min, 1].values.tolist(),
-             'fTimeRed': file[file["Flags"] == 20].iloc[0:min, 1].values.tolist(),
-             'fTimeGreen': file[file["Flags"] == 18].iloc[0:min, 1].values.tolist(),
-             'f1GreenGreen': file[file["Flags"] == 18].iloc[0:min, f1greencol].values.tolist(),
-             'f1GreenIso': file[file["Flags"] == 17].iloc[0:min, f1greencol].values.tolist(),
-             'f1RedRed':file[file["Flags"] == 20].iloc[0:min, f1redcol].values.tolist(),
-             'f1RedIso': file[file["Flags"] == 17].iloc[0:min, f1redcol].values.tolist()}
-  
+    data_dict = { 'animalID': [animal_ID]*(min-start_idx) , 'date': [exp_date]*(min-start_idx),
+             'description': [exp_desc]*(min-start_idx),
+             'fTimeIso': file[file["Flags"] == 17].iloc[start_idx:min, 1].values.tolist(),
+             'fTimeRed': file[file["Flags"] == 20].iloc[start_idx:min, 1].values.tolist(),
+             'fTimeGreen': file[file["Flags"] == 18].iloc[start_idx:min, 1].values.tolist(),
+             'f1GreenGreen': file[file["Flags"] == 18].iloc[start_idx:min, f1greencol].values.tolist(),
+             'f1GreenIso': file[file["Flags"] == 17].iloc[start_idx:min, f1greencol].values.tolist(),
+             'f1RedRed':file[file["Flags"] == 20].iloc[start_idx:min, f1redcol].values.tolist(),
+             'f1RedIso': file[file["Flags"] == 17].iloc[start_idx:min, f1redcol].values.tolist()}
+    
     #Add additional columns if 2 fiber
     if f2greencol != None:
         
-        data_dict['f2GreenGreen'] = file[file["Flags"] == 18].iloc[0:min, f2greencol].values.tolist()
-        data_dict['f2GreenIso'] = file[file["Flags"] == 17].iloc[0:min, f2greencol].values.tolist()
-        data_dict['f2RedRed'] = file[file["Flags"] == 20].iloc[0:min, f2redcol].values.tolist()
-        data_dict['f2RedIso'] = file[file["Flags"] == 17].iloc[0:min, f2redcol].values.tolist()
-   
-    fdata=pd.DataFrame(columns=data_dict.keys())
-    # Dictionary to dataframe
-    for n in data_dict:
-        fdata[n]=fdata[n].astype('object')
-        fdata.at[0,n]=data_dict[n]
- 
-    # Dataframe to output csv
-    if write_xlsx is True:
-        output_csv = output_filename + '_Summary.csv'
-        fdata.to_csv(output_csv, index=None, na_rep='')
-        print('Output CSV written to ' + output_csv)
-
+        data_dict['f2GreenGreen'] = file[file["Flags"] == 18].iloc[start_idx:min, f2greencol].values.tolist()
+        data_dict['f2GreenIso'] = file[file["Flags"] == 17].iloc[start_idx:min, f2greencol].values.tolist()
+        data_dict['f2RedRed'] = file[file["Flags"] == 20].iloc[start_idx:min, f2redcol].values.tolist()
+        data_dict['f2RedIso'] = file[file["Flags"] == 17].iloc[start_idx:min, f2redcol].values.tolist()
+    
     
 
 
+    fdata=pd.DataFrame.from_dict(data_dict)
     return fdata
 
    
-def raw_signal_trace(fdata):
+def raw_signal_trace(fdata, file):
     import plotly.express as px
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
 
-    fig = make_subplots(rows=2, cols=2)
+    fig = make_subplots(rows=2, cols=2, shared_xaxes=True, vertical_spacing=0.02, x_title="Time (s)", y_title="Fluorescence")
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata['f1GreenGreen'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata['f1GreenGreen'],
             mode="lines",
             line=go.scatter.Line(color="Green"),
+            name='f1Green',
+            text='f1Green',
             showlegend=False), row=1, col=1
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeIso'].at[0],
-            y=fdata['f1GreenIso'].at[0],
+            x=fdata['fTimeIso'],
+            y=fdata['f1GreenIso'],
             mode="lines",
             line=go.scatter.Line(color="Cyan"),
+            name='f1GreenIso',
+            text='f1GreenIso',
             showlegend=False), row=1, col=1
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeRed'].at[0],
-            y=fdata['f1RedRed'].at[0],
+            x=fdata['fTimeRed'],
+            y=fdata['f1RedRed'],
             mode="lines",
             line=go.scatter.Line(color="Red"),
+            name='f1Red',
+            text='f1Red',
             showlegend=False), row=1, col=2
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeIso'].at[0],
-            y=fdata['f1RedIso'].at[0],
+            x=fdata['fTimeIso'],
+            y=fdata['f1RedIso'],
             mode="lines",
             line=go.scatter.Line(color="Violet"),
+            name='f1RedIso',
+            text='f1RedIso',
             showlegend=False), row=1, col=2
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata['f2GreenGreen'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata['f2GreenGreen'],
             mode="lines",
             line=go.scatter.Line(color="Green"),
+            name='f2Green',
+            text='f2Green',
             showlegend=False), row=2, col=1
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeIso'].at[0],
-            y=fdata['f2GreenIso'].at[0],
+            x=fdata['fTimeIso'],
+            y=fdata['f2GreenIso'],
             mode="lines",
+            name='f2GreenIso',
+            text='f2GreenIso',
             line=go.scatter.Line(color="Cyan"),
             showlegend=False), row=2, col=1
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeRed'].at[0],
-            y=fdata['f2RedRed'].at[0],
+            x=fdata['fTimeRed'],
+            y=fdata['f2RedRed'],
             mode="lines",
+            name='f2Red',
+            text='f2Red',
             line=go.scatter.Line(color="Red"),
             showlegend=False), row=2, col=2
     )
     fig.add_trace(
         go.Scatter(
-            x=fdata['fTimeIso'].at[0],
-            y=fdata['f2RedIso'].at[0],
+            x=fdata['fTimeIso'],
+            y=fdata['f2RedIso'],
             mode="lines",
             line=go.scatter.Line(color="Violet"),
+            name='f2RedIso',
+            text='f2RedIso',
             showlegend=False), row=2, col=2
+    )
+    fig.update_layout(
+        title="Raw Traces from all channels for " + file,
     )
     fig.show()
     return
 
 
-def plot_fitted_exp(fdata, output_filename, signals, references):
+def plot_fitted_exp(fdata, file, signals, references):
     import plotly.express as px
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
@@ -249,62 +258,93 @@ def plot_fitted_exp(fdata, output_filename, signals, references):
     # first and third inputs for p0) must be positive
     
     for i in range(len(signals)):
-        popt, pcov = curve_fit(fit_exp, fdata['fTimeGreen'].at[0], fdata[signals[i]].at[0], p0=(1.0, 0, 1.0, 0), bounds=(0,np.inf))
+        popt, pcov = curve_fit(fit_exp, fdata['fTimeGreen'], fdata[signals[i]], p0=(1.0, 0, 1.0, 0, 0), bounds=(0,np.inf))
 
         AS = popt[0]  # A value
         BS = popt[1]  # B value
         CS = popt[2]  # C value
         DS = popt[3]  # D value
-
-        popt, pcov = curve_fit(fit_exp, fdata['fTimeGreen'].at[0], fdata[references[i]].at[0], p0=(1.0, 0, 1.0, 0), bounds=(0,np.inf))
+        ES = popt[4]
+        
+        popt, pcov = curve_fit(fit_exp, fdata['fTimeGreen'], fdata[references[i]], p0=(1.0, 0, 1.0, 0, 0), bounds=(0,np.inf))
 
         AR = popt[0]  # A value
         BR = popt[1]  # B value
         CR = popt[2]  # C value
         DR = popt[3]  # D value
+        ER = popt[4]       
 
         # Generate fit line using calculated coefficients
-        fitSig = fit_exp(fdata['fTimeGreen'].at[0], AS, BS, CS, DS)
-        fitRef = fit_exp(fdata['fTimeGreen'].at[0], AR, BR, CR, DR)
-        normedSig=[k/j for k,j in zip(fdata[signals[i]].at[0], fitSig)]
-        normedRef=[k/j for k,j in zip(fdata[references[i]].at[0], fitSig)] 
+        fitSig = fit_exp(fdata['fTimeGreen'], AS, BS, CS, DS, ES)
+        fitRef = fit_exp(fdata['fTimeGreen'], AR, BR, CR, DR, ER)
         
-        normedToReference=normalize_to_reference(normedSig, normedRef)
+        sigRsquare=np.corrcoef(fdata[signals[i]], fitSig)[0,1]**2
+        refRsquare=np.corrcoef(fdata[references[i]], fitRef)[0,1]**2
+        print('sig r^2 =', sigRsquare ,'ref r^2 =', refRsquare )
         
-        fdata.loc[:,signals[i] + ' expfit']=['na']
-        fdata.at[0, signals[i] + ' expfit']=fitSig
+        if sigRsquare < .01:
+            print('sig r^2 =', sigRsquare)
+            print('No exponential decay was detected in ', signals[i])
+            print(signals[i] + ' expfit is now the median of ', signals[i])
+            AS=0
+            BS=0
+            CS=0
+            DS=0
+            ES=np.median(fdata[signals[i]])
+            fitSig = fit_exp(fdata['fTimeGreen'], AS, BS, CS, DS, ES)
+            
+        
+        if refRsquare < .001:
+            print('ref r^2 =', refRsquare)
+            print('No exponential decay was detected in ', references[i])
+            print(references[i] + ' expfit is now the median  ', references[i])
+            AR=0
+            BR=0
+            CR=0
+            DR=0
+            ER= np.median(fdata[references[i]])
+            fitRef = fit_exp(fdata['fTimeGreen'], AR, BR, CR, DR, ER)
+            
+            
+        normedSig=[(k/j) for k,j in zip(fdata[signals[i]], fitSig)]
+        normedRef=[(k/j) for k,j in zip(fdata[references[i]], fitRef)]      
+        
+        popt, pcov = curve_fit(lin_fit, normedSig, normedRef, bounds=([0, -5],[np.inf, 5]))
+        
+        AL =popt[0]
+        BL =popt[1]
+        
+        AdjustedRef=[AL* j + BL for j in normedSig]
+        normedToReference=[(k/j) for k,j in zip(normedSig, AdjustedRef)]
+        
+        fdata.loc[:,signals[i] + ' expfit']=fitSig
         fdata.loc[:,signals[i] + ' expfit parameters']=['na']
-        fdata.at[0, signals[i] + ' expfit parameters']=[AS, BS, CS, DS]
-        fdata.loc[:,signals[i] + ' normed to exp']=['na']
-        fdata.at[0,signals[i] + ' normed to exp']=normedSig
-        fdata.loc[:,references[i] + ' expfit']=['na']
-        fdata.at[0,references[i] + ' expfit']=fitRef
+        fdata.at[0:4, signals[i] + ' expfit parameters']=['A= ' + str(AS), 'B= ' + str(BS), 'C= ' + str(CS), 'D= ' + str(DS), 'E= ' + str(ES)]
+        fdata.loc[:,signals[i] + ' normed to exp']=normedSig
+        fdata.loc[:,references[i] + ' expfit']=fitRef
         fdata.loc[:,references[i] + ' expfit parameters']=['na']
-        fdata.at[0,references[i] + ' expfit parameters']=[AR, BR, CR, DR]
-        fdata.loc[:,references[i] + ' normed to exp']=['na']
-        fdata.at[0,references[i] + ' normed to exp']=normedRef
-        fdata.loc[:,references[i] + ' fitted to ' + signals[i]]=['na']
-        fdata.at[0,references[i] + ' fitted to ' + signals[i]]=normedToReference[0]
+        fdata.at[0:4,references[i] + ' expfit parameters']=['A= ' + str(AR), 'B= ' + str(BR), 'C= ' + str(CR), 'D= ' + str(DR), 'E= ' + str(ER)]
+        fdata.loc[:,references[i] + ' normed to exp']=normedRef
+        fdata.loc[:,references[i] + ' fitted to ' + signals[i]]=AdjustedRef
         fdata.loc[:,references[i] + ' linfit parameters']=['na']
-        fdata.at[0,references[i] + ' linfit parameters']=normedToReference[2]
-        fdata.loc[:,signals[i] + ' final normalized'] = ['na']
-        fdata.at[0,signals[i] + ' final normalized'] =normedToReference[1]
+        fdata.at[0:1,references[i] + ' linfit parameters']= ['A= ' + str(AL), 'B= ' + str(BL)]
+        fdata.loc[:,signals[i] + ' final normalized'] = normedToReference
         
-        fig = make_subplots(rows=3, cols=2, subplot_titles=("Biexponential Fitted to Signal", "Signal Normalized to Biexponential", "Biexponential Fitted to Ref", "Reference Normalized to Biexponential", "Reference Linearly Fitted to Signal", "Final Normalized Signal"))
+        fig = make_subplots(rows=3, cols=2, x_title='Time(s)', subplot_titles=("Biexponential Fitted to Signal", "Signal Normalized to Biexponential", "Biexponential Fitted to Ref", "Reference Normalized to Biexponential", "Reference Linearly Fitted to Signal", "Final Normalized Signal"), shared_xaxes=True, vertical_spacing=0.1)
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[signals[i]].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[signals[i]],
             mode="lines",
             line=go.scatter.Line(color="Green"),
             name ='Signal:' + signals[i],
             text = 'Signal',
-            showlegend=True), row=1, col=1
+            showlegend=False), row=1, col=1
         )
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[signals[i] + ' expfit'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[signals[i] + ' expfit'],
             mode="lines",
             line=go.scatter.Line(color="Purple"),
             text='Biexponential fitted to Signal',
@@ -312,8 +352,8 @@ def plot_fitted_exp(fdata, output_filename, signals, references):
         )
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[signals[i] + ' normed to exp'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[signals[i] + ' normed to exp'],
             mode="lines",
             line=go.scatter.Line(color="Green"),
             text = 'Signal Normalized to Biexponential',
@@ -321,18 +361,18 @@ def plot_fitted_exp(fdata, output_filename, signals, references):
         )
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[references[i]].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[references[i]],
             mode="lines",
             line=go.scatter.Line(color="Cyan"),
             name='Reference:' + references[i],
             text='Reference',
-            showlegend=True), row=2, col=1
+            showlegend=False), row=2, col=1
         )
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[references[i] + ' expfit'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[references[i] + ' expfit'],
             mode="lines",
             line=go.scatter.Line(color="Purple"),
             text='Biexponential fit to Reference',
@@ -340,8 +380,8 @@ def plot_fitted_exp(fdata, output_filename, signals, references):
         )
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[references[i] + ' normed to exp'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[references[i] + ' normed to exp'],
             mode="lines",
             line=go.scatter.Line(color="Cyan"),
             text='Reference Normalized to Biexponential',
@@ -349,27 +389,28 @@ def plot_fitted_exp(fdata, output_filename, signals, references):
         )
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[signals[i] + ' normed to exp'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[signals[i] + ' normed to exp'],
             mode="lines",
             line=go.scatter.Line(color="Green"),
             text='Signal Normalized to Biexponential',
             showlegend=False), row=3, col=1
         )
+        
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[references[i] + ' fitted to ' + signals[i]].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[references[i] + ' fitted to ' + signals[i]],
             mode="lines",
             line=go.scatter.Line(color="Cyan"),
             text='Reference linearly scaled to signal',
-            showlegend=False), row=3, col=1
-            
+            showlegend=False), row=3, col=1  
         )
+        
         fig.add_trace(
             go.Scatter(
-            x=fdata['fTimeGreen'].at[0],
-            y=fdata[signals[i] + ' final normalized'].at[0],
+            x=fdata['fTimeGreen'],
+            y=fdata[signals[i] + ' final normalized'],
             mode="lines",
             line=go.scatter.Line(color="Pink"), 
             text='Final Normalized Signal',
@@ -377,17 +418,14 @@ def plot_fitted_exp(fdata, output_filename, signals, references):
             
         )
         fig.update_layout(
-            title="Normalizing " + signals[i],
-            xaxis_title='Time',
+            title="Normalizing " + signals[i] + ' for ' + file
         )
         fig.show()
-    output_xlsx = output_filename + '_Summary.csv'
-    fdata.to_csv(output_xlsx, index=False)
-    print('Summary file has been updated')
+
     return fdata
 
 
-def fit_exp(values, a, b, c, d):
+def fit_exp(values, a, b, c, d, e):
     """Transforms data into an exponential function
         of the form y=A*exp(-B*X)+C*exp(-D*x)
 
@@ -401,37 +439,52 @@ def fit_exp(values, a, b, c, d):
     """
     values = np.array(values)
 
-    return a * np.exp(-b * values) + c * np.exp(-d * values)
+    return a * np.exp(-b * values) + c * np.exp(-d * values) + e
+
+def lin_fit(values, a, b):
+
+    values = np.array(values)
+    
+    return a * values + b
 
 
-def normalize_to_reference(signal, reference):
-    """Creates a plot normalizing 1 fiber data to the isosbestic
-        Parameters
-        ----------
-        fpho_dataframe: string
-                pandas dataframe
-        output_filename: string
-                name for output file
-        Returns:
-        --------
-        output_filename_f1GreenNorm.png
-        & output_filename_f1RedNorm.png: png files
-                containing the normalized plot for each fluorophore
-    """
+def fix_frame_shift(n, data_dict, file):
+    i=0
+    jump=0
+    jumpIdx=-1
+    for j in range(n):
+        while i < len(data_dict['f1GreenGreen'])-2:
+            distanceFromNext=abs(data_dict['f1GreenGreen'][i] - data_dict['f1GreenGreen'][i+1])
+            distanceFromIso=abs(data_dict['f1GreenGreen'][i] - data_dict['f1GreenIso'][i+1])
+            if distanceFromNext>distanceFromIso and distanceFromNext>jump:
+                jump=distanceFromNext
+                jumpIdx=i
+            i=i+1
+        if jump>0:
+            if abs(data_dict['f1GreenGreen'][jumpIdx] - data_dict['f1GreenIso'][jumpIdx+1]) < abs(data_dict['f1GreenIso'][jumpIdx] - data_dict['f1GreenGreen'][jumpIdx+1]):
+                data_dict['f1GreenGreen'][jumpIdx+1:]=data_dict['f1GreenIso'][jumpIdx+1:]
+                data_dict['f1GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f1greencol].values.tolist()
 
-    regGreen = np.polyfit(reference, signal, 1)
-    a = regGreen[0]
-    b = regGreen[1]
+                data_dict['f1RedIso'][jumpIdx+1:]=data_dict['f1RedRed'][jumpIdx+1:]
+                data_dict['f1RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f1redcol].values.tolist() 
 
-    # Use the coefficients to create a control fit
-    fittedReference = []
-    for value in reference:
-        fittedReference.append(a * value + b)
+                if f2greencol != None:
+                    data_dict['f2GreenGreen'][jumpIdx+1:]=data_dict['f2GreenIso'][jumpIdx+1:]
+                    data_dict['f2GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f2greencol].values.tolist()
 
-    # Normalize the fluorophore data using the control fit
-    normalized = []
-    for i in range(len(fittedReference)):
-        normalized.append((signal[i]/ fittedReference[i]))
-                          
-    return [fittedReference, normalized, [a,b]]
+                    data_dict['f2RedIso'][jumpIdx+1:]=data_dict['f2RedRed'][jumpIdx+1:]
+                    data_dict['f2RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f2redcol].values.tolist() 
+            else:
+                data_dict['f1GreenIso'][jumpIdx+1:]=data_dict['f1GreenGreen'][jumpIdx+1:]
+                data_dict['f1GreenGreen'][i+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f1greencol].values.tolist()
 
+                data_dict['f1RedRed'][jumpIdx+1:]=data_dict['f1RedIso'][jumpIdx+1:]
+                data_dict['f1RedIso'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f1redcol].values.tolist()
+
+                if f2greencol != None:
+                    data_dict['f2GreenGreen'][jumpIdx+1:]=data_dict['f2GreenIso'][jumpIdx+1:]
+                    data_dict['f2GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f2greencol].values.tolist()
+
+                    data_dict['f2RedIso'][jumpIdx+1:]=data_dict['f2RedRed'][jumpIdx+1:]
+                    data_dict['f2RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f2redcol].values.tolist() 
+    return(data_dict)
