@@ -134,7 +134,42 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
         data_dict['f2RedIso'] = file[file["Flags"] == 17].iloc[start_idx:min, f2redcol].values.tolist()
     
     
+    i=0
+    jump=0
+    jumpIdx=-1
+    for j in range(0):
+        while i < len(data_dict['f1GreenGreen'])-2:
+            distanceFromNext=abs(data_dict['f1GreenGreen'][i] - data_dict['f1GreenGreen'][i+1])
+            distanceFromIso=abs(data_dict['f1GreenGreen'][i] - data_dict['f1GreenIso'][i+1])
+            if distanceFromNext>distanceFromIso and distanceFromNext>jump:
+                jump=distanceFromNext
+                jumpIdx=i
+            i=i+1
+        if jump>0:
+            if abs(data_dict['f1GreenGreen'][jumpIdx] - data_dict['f1GreenIso'][jumpIdx+1]) > abs(data_dict['f1GreenIso'][jumpIdx] - data_dict['f1GreenGreen'][jumpIdx+1]):
+                data_dict['f1GreenGreen'][jumpIdx+1:]=data_dict['f1GreenIso'][jumpIdx+1:]
+                data_dict['f1GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f1greencol].values.tolist()
 
+                data_dict['f1RedIso'][jumpIdx+1:]=data_dict['f1RedRed'][jumpIdx+1:]
+                data_dict['f1RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f1redcol].values.tolist()
+                if f2greencol != None:
+                    data_dict['f2GreenGreen'][jumpIdx+1:]=data_dict['f2GreenIso'][jumpIdx+1:]
+                    data_dict['f2GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f2greencol].values.tolist()
+
+                    data_dict['f2RedIso'][jumpIdx+1:]=data_dict['f2RedRed'][jumpIdx+1:]
+                    data_dict['f2RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f2redcol].values.tolist()
+            else:
+                data_dict['f1GreenIso'][jumpIdx+1:]=data_dict['f1GreenGreen'][jumpIdx+1:]
+                data_dict['f1GreenGreen'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f1greencol].values.tolist()
+
+                data_dict['f1RedRed'][jumpIdx+1:]=data_dict['f1RedIso'][jumpIdx+1:]
+                data_dict['f1RedIso'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f1redcol].values.tolist()
+                if f2greencol != None:
+                    data_dict['f2GreenIso'][jumpIdx+1:]=data_dict['f2GreenGreen'][jumpIdx+1:]
+                    data_dict['f2GreenGreen'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f2greencol].values.tolist()
+
+                    data_dict['f2RedRed'][jumpIdx+1:]=data_dict['f2RedIso'][jumpIdx+1:]
+                    data_dict['f2RedIso'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f2redcol].values.tolist()
 
     fdata=pd.DataFrame.from_dict(data_dict)
     return fdata
@@ -314,7 +349,7 @@ def plot_fitted_exp(fdata, file, signals, references):
         AL =popt[0]
         BL =popt[1]
         
-        AdjustedRef=[AL* j + BL for j in normedSig]
+        AdjustedRef=[AL* j + BL for j in normedRef]
         normedToReference=[(k/j) for k,j in zip(normedSig, AdjustedRef)]
         
         fdata.loc[:,signals[i] + ' expfit']=fitSig
