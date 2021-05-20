@@ -76,16 +76,16 @@ def main():
                                                 config['BORIS_file'],
                                                 fpho_df)
             if config['write_xlsx'] is True:
-                output_xlsx = key
+                output_xlsx = config['output_filename'] + '_Summary.csv'
                 if path.exists(output_xlsx):
                     answer=input('Are you sure you want to overwrite'+output_xlsx+'(y or n)')
                     if answer != 'y':
                             print('Did not overwrite' + output_xlsx)
                             print('Change output_filename or write_xlsx value and rerun')
                             sys.exit()
-                else:
-                    fpho_df.to_csv(output_xlsx, index=False)
-                    print('Behavior data has been added to the summary file')
+
+                fpho_df.to_csv(output_xlsx, index=False)
+                print('Behavior data has been added to the summary file')
         
         all_data['output_xlsx']=fpho_df
         

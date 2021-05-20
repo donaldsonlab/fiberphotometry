@@ -7,47 +7,47 @@
 
 # REQUIRED INPUTS ------------------------------------------
 #To import a new fiberphotometry data file, set True (otherwise False)
-import_new: False
+import_new: True
 
 #  Name/file path for file containing fiberpho data from Bonsai (string)
-input_filename: "Fiberpho/mPFC synchrony/20201221 2 weeks paired/3.3739x3904/FiberPhoSig2020-12-19T12_20_17.csv"
+input_filename: "Data/FiberPhoSig2021-05-10T13_42_07.csv"
 
 # Name for output files including summary csv and plots 
 # Do not include a file type (e.g. "my_file_name")
-output_filename: "2_weeks_3739_3904"
+output_filename: "4043_3660"
 
 # Column index for green 1 (int between 3 and 6)
-f1greencol: 5
+f1greencol: 9
 
 # Column index for green 1 (int between 3 and 6)
-f1redcol: 3
+f1redcol: 5
 
 #Column index for green 2 (int between 3 and 6) (enter 'None' if one fiber)
-f2greencol: 6
+f2greencol: 10
 
 # Column index for green 1 (int between 3 and 6) (enter 'None' if one fiber)
-f2redcol: 4
+f2redcol: 6
 
 #  Number of the animal corresponding to fluoresence data (int)
-animal_ID: "3739 3904"
+animal_ID: "4043 3660"
 
 # Date of data collection (string, form: YYYY-MM-DD)           
-exp_date: "2020-1-21" 
+exp_date: "2020-5-10"
 
 # Brief explantation of experiment (string)
-exp_desc: "PFC Sync"
+exp_desc: "Post-bond"
 
 ##To reload data that's been previously analyzed
-reload_data: True
+reload_data: False
 
 #Summary files to import
-reload_filenames: ["initial_pairings_3739_3754_Summary.csv", "initial_pairings_3737_3743_Summary.csv"]
+reload_filenames: ["Data/4020_4030_Summary.csv", "Data/4035_3666_Summary.csv", "Data/4039_4034_Summary.csv", "Data/4040_3661_Summary.csv", "Data/4043_3660_Summary.csv"]
 
 # To write an excel file of fiberpho data, set True (otherwise False)
-write_xlsx: False
+write_xlsx: True
 
 # To plot the raw signal trace, set True (otherwise False)
-plot_raw_signal: False
+plot_raw_signal: True
 
 # which channels are you interested in analyzing
 # options [f1GreenGreen, f1GreenIso, f2GreenGreen, f2GreenIso, f1RedRed, f1RedIso, f2RedRed, f2RedIso] 
@@ -66,10 +66,10 @@ normalize_data: True
 # If not using, leave import as False and other fields empty
 
 # To import behavior data, set True (otherwise False)
-import_behavior: False
+import_behavior: True
 
 # Name/file path of BORIS file containing behavior data (string)
-BORIS_file: "Fiberpho/mPFC synchrony/20201221 2 weeks paired/3.3739x3904/Beh2020-12-19T12_20_17.csv"
+BORIS_file: "Data/13_42_07_boris_postbond_fibers3&4.csv"
 
 plot_behavior: False
 
@@ -94,4 +94,4 @@ channels: [[f1GreenGreen, f2GreenGreen]]
 behavior_specific_pearsons: True
 
 #Add each behavior you would like to put through analysis, to combine two different behaviors add them to the same list
-behaviors: [['together'], ['seperate']]
+behaviors: [['together'], ['separate']]
