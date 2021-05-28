@@ -113,7 +113,10 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
     length=len(file['Flags'])-1
     extras=length%3
     min=int((length-extras)/3)-1
-    start_idx=300
+    start_idx=301
+    
+    # FIX HERE: make sure start idx flag = 17
+    # FIX HERE: SORT BY EVERY 3RD
     #create a dictionary with parsed data    
     data_dict = { 'animalID': [animal_ID]*(min-start_idx) , 'date': [exp_date]*(min-start_idx),
              'description': [exp_desc]*(min-start_idx),
@@ -122,6 +125,8 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
              'fTimeGreen': file[file["Flags"] == 18].iloc[start_idx:min, 1].values.tolist(),
              'f1GreenGreen': file[file["Flags"] == 18].iloc[start_idx:min, f1greencol].values.tolist(),
              'f1GreenIso': file[file["Flags"] == 17].iloc[start_idx:min, f1greencol].values.tolist(),
+             'f1GreenRed': file[file["Flags"] == 20].iloc[start_idx:min, f1greencol].values.tolist(),
+             'f1RedGreen': file[file["Flags"] == 18].iloc[start_idx:min, f1greencol].values.tolist(),
              'f1RedRed':file[file["Flags"] == 20].iloc[start_idx:min, f1redcol].values.tolist(),
              'f1RedIso': file[file["Flags"] == 17].iloc[start_idx:min, f1redcol].values.tolist()}
     
@@ -130,14 +135,22 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
         
         data_dict['f2GreenGreen'] = file[file["Flags"] == 18].iloc[start_idx:min, f2greencol].values.tolist()
         data_dict['f2GreenIso'] = file[file["Flags"] == 17].iloc[start_idx:min, f2greencol].values.tolist()
+        data_dict['f2GreenRed'] = file[file["Flags"] == 20].iloc[start_idx:min, f2greencol].values.tolist()
         data_dict['f2RedRed'] = file[file["Flags"] == 20].iloc[start_idx:min, f2redcol].values.tolist()
         data_dict['f2RedIso'] = file[file["Flags"] == 17].iloc[start_idx:min, f2redcol].values.tolist()
-    
-    
-    i=0
-    jump=0
-    jumpIdx=-1
+        data_dict['f2RedGreen'] = file[file["Flags"] == 18].iloc[start_idx:min, f2redcol].values.tolist()
+
+# FIX: MAKE INTO NEW FUNCTION (dict, number of jumps)
+
+# Frame Drop Correction
+    # if: 1 frame drop
+        # drop jump idx frame, match the ones before the jump and after the jump idx
+        # all lists in dict need to be the same len (be careful when dropping/replacing the frame, out of time, etc)
+    # else: 2 frame drop
     for j in range(0):
+        i=0
+        jump=0
+        jumpIdx=-1
         while i < len(data_dict['f1GreenGreen'])-2:
             distanceFromNext=abs(data_dict['f1GreenGreen'][i] - data_dict['f1GreenGreen'][i+1])
             distanceFromIso=abs(data_dict['f1GreenGreen'][i] - data_dict['f1GreenIso'][i+1])
@@ -145,31 +158,62 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
                 jump=distanceFromNext
                 jumpIdx=i
             i=i+1
+
         if jump>0:
-            if abs(data_dict['f1GreenGreen'][jumpIdx] - data_dict['f1GreenIso'][jumpIdx+1]) > abs(data_dict['f1GreenIso'][jumpIdx] - data_dict['f1GreenGreen'][jumpIdx+1]):
+            
+            #DELETE
+            print(jumpIdx)
+            
+            if abs(data_dict['f1GreenGreen'][jumpIdx] - data_dict['f1GreenIso'][jumpIdx+3]) < abs(data_dict['f1GreenIso'][jumpIdx] - data_dict['f1GreenGreen'][jumpIdx+3]):
+                
+                #DELETE
+                print("if")
+                
+                temp=data_dict['f1GreenGreen'][jumpIdx+1:]
                 data_dict['f1GreenGreen'][jumpIdx+1:]=data_dict['f1GreenIso'][jumpIdx+1:]
-                data_dict['f1GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f1greencol].values.tolist()
+                data_dict['f1GreenIso'][jumpIdx+1:]=data_dict['f1GreenRed'][jumpIdx+1:]
+                data_dict['f1GreenRed'][jumpIdx+1:]=temp
 
+                temp=data_dict['f1RedIso'][jumpIdx+1:]
                 data_dict['f1RedIso'][jumpIdx+1:]=data_dict['f1RedRed'][jumpIdx+1:]
-                data_dict['f1RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f1redcol].values.tolist()
+                data_dict['f1RedRed'][jumpIdx+1:]=data_dict['f1RedGreen'][jumpIdx+1:]
+                data_dict['f1RedGreen'][jumpIdx+1:]=temp
+                
                 if f2greencol != None:
+                    temp=data_dict['f2GreenGreen'][jumpIdx+1:]
                     data_dict['f2GreenGreen'][jumpIdx+1:]=data_dict['f2GreenIso'][jumpIdx+1:]
-                    data_dict['f2GreenIso'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f2greencol].values.tolist()
+                    data_dict['f2GreenIso'][jumpIdx+1:]=data_dict['f2GreenRed'][jumpIdx+1:]
+                    data_dict['f2GreenRed'][jumpIdx+1:]=temp
 
+                    temp=data_dict['f2RedIso'][jumpIdx+1:]
                     data_dict['f2RedIso'][jumpIdx+1:]=data_dict['f2RedRed'][jumpIdx+1:]
-                    data_dict['f2RedRed'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f2redcol].values.tolist()
+                    data_dict['f2RedRed'][jumpIdx+1:]=data_dict['f2RedGreen'][jumpIdx+1:]
+                    data_dict['f2RedGreen'][jumpIdx+1:]=temp
             else:
+                
+                #DELETE
+                print("else")
+                
+                temp=data_dict['f1GreenIso'][jumpIdx+1:]
                 data_dict['f1GreenIso'][jumpIdx+1:]=data_dict['f1GreenGreen'][jumpIdx+1:]
-                data_dict['f1GreenGreen'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f1greencol].values.tolist()
+                data_dict['f1GreenGreen'][jumpIdx+1:]=data_dict['f1GreenRed'][jumpIdx+1:]
+                data_dict['f1GreenRed'][jumpIdx+1:]=temp
 
+                temp=data_dict['f1RedRed'][jumpIdx+1:]
                 data_dict['f1RedRed'][jumpIdx+1:]=data_dict['f1RedIso'][jumpIdx+1:]
-                data_dict['f1RedIso'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f1redcol].values.tolist()
+                data_dict['f1RedIso'][jumpIdx+1:]=data_dict['f1RedGreen'][jumpIdx+1:]
+                data_dict['f1RedGreen'][jumpIdx+1:]=temp
+                
                 if f2greencol != None:
+                    temp=data_dict['f2GreenIso'][jumpIdx+1:]
                     data_dict['f2GreenIso'][jumpIdx+1:]=data_dict['f2GreenGreen'][jumpIdx+1:]
-                    data_dict['f2GreenGreen'][jumpIdx+1:]=file[file["Flags"] == 20].iloc[jumpIdx+start_idx+1:min, f2greencol].values.tolist()
+                    data_dict['f2GreenGreen'][jumpIdx+1:]=data_dict['f2GreenRed'][jumpIdx+1:]
+                    data_dict['f2GreenRed'][jumpIdx+1:]=temp
 
+                    temp=data_dict['f2RedRed'][jumpIdx+1:]
                     data_dict['f2RedRed'][jumpIdx+1:]=data_dict['f2RedIso'][jumpIdx+1:]
-                    data_dict['f2RedIso'][jumpIdx+1:]=file[file["Flags"] == 18].iloc[jumpIdx+start_idx+1:min, f2redcol].values.tolist()
+                    data_dict['f2RedIso'][jumpIdx+1:]=data_dict['f2RedGreen'][jumpIdx+1:]
+                    data_dict['f2RedGreen'][jumpIdx+1:]=temp
 
     fdata=pd.DataFrame.from_dict(data_dict)
     return fdata
