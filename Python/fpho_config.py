@@ -57,7 +57,12 @@ def main():
                                           exp_date=(
                                               config['exp_date']),
                                           exp_desc=(
-                                              config['exp_desc']))
+                                              config['exp_desc']),
+                                          frameshift=(
+                                              config['frameshift']),
+                                          framedrops=(
+                                              config['framedrops']))
+
         if config['write_xlsx'] is True:          
             output_xlsx = config['output_filename'] + '_Summary.csv'
             if path.exists(output_xlsx):
@@ -112,11 +117,12 @@ def main():
             if config['write_xlsx'] is True:
                 fpho_df.to_csv(output_xlsx, index=False)
                 print(key, 'has been updated to include normalized data')
-
+        
+        # Plots behavior
         if config['plot_behavior'] is True:
             behavior_setup.plot_behavior(fpho_df, key, config['all_signals'])
 
-        #Plot the discrete fourier transform of you're channels of interest 
+        # Plot the discrete fourier transform of you're channels of interest
         if config['fourier_transform'] is True:
             correlation_setup.plot_FFT(fpho_df, key, config['channels'])
 

@@ -22,7 +22,7 @@ driver_version = 'v4.0'
 
 def import_fpho_data(input_filename, output_filename, f1greencol, 
                      f1redcol, f2greencol, f2redcol,
-                     animal_ID, exp_date, exp_desc):
+                     animal_ID, exp_date, exp_desc, frameshift, framedrops):
     """Takes a file name, returns a dataframe of parsed data
 
         Parameters
@@ -85,7 +85,6 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
         sys.exit()
 
     if f2greencol is not None:
-
         # Catch error: f2green col entry not integer
         try:
             f2greencol = int(f2greencol)
@@ -98,7 +97,7 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
                   + "Input data contains", n_columns, "columns.\n")
             sys.exit(1)
     
-        # Open file, catch errors
+    # Open file, catch errors
     try:
         file = pd.read_csv(input_filename)
     except FileNotFoundError:
@@ -107,8 +106,6 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
     except PermissionError:
         print("Could not access file: " + input_filename)
         sys.exit(2)
-    
-
     
     # Ensures start index is on green (green flagged as 18)
     start_idx=301 # cut off first ~300 entries
@@ -153,17 +150,23 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
         data_dict['f2RedRed'] = file.iloc[start_idx+1:min:3, f2redcol].values.tolist()
         data_dict['f2RedIso'] = file.iloc[start_idx+2:min:3, f2redcol].values.tolist()
         data_dict['f2RedGreen'] = file.iloc[start_idx:min:3, f2redcol].values.tolist()
-    for key in data_dict:
-        print(key, len(data_dict[key]))
+        
+    # Correct for frame shifts
+    if frameshift == True:
+        data_dict = fix_frame_shift(data_dict, framedrops) # get frame drops and T/F from config.yml
 
-# FIX: MAKE INTO NEW FUNCTION (dict, number of jumps)
-
-# Frame Drop Correction
+    # Convert dictionary to pandas dataframe and return
+    fdata=pd.DataFrame.from_dict(data_dict)
+    return fdata
+    
+    
+def fix_frame_shift(data_dict, framedrops):
+   # Frame Drop Correction
     # if: 1 frame drop
         # drop jump idx frame, match the ones before the jump and after the jump idx
         # all lists in dict need to be the same len (be careful when dropping/replacing the frame, out of time, etc)
     # else: 2 frame drop
-    for j in range(0):
+    for j in range(framedrops):
         i=0
         jump=0
         jumpIdx=-1
@@ -177,14 +180,7 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
 
         if jump>0:
             
-            #DELETE
-            print(jumpIdx)
-            
             if abs(data_dict['f1GreenGreen'][jumpIdx] - data_dict['f1GreenIso'][jumpIdx+3]) < abs(data_dict['f1GreenIso'][jumpIdx] - data_dict['f1GreenGreen'][jumpIdx+3]):
-                
-                #DELETE
-                print("if")
-                
                 temp=data_dict['f1GreenGreen'][jumpIdx+1:]
                 data_dict['f1GreenGreen'][jumpIdx+1:]=data_dict['f1GreenIso'][jumpIdx+1:]
                 data_dict['f1GreenIso'][jumpIdx+1:]=data_dict['f1GreenRed'][jumpIdx+1:]
@@ -206,10 +202,6 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
                     data_dict['f2RedRed'][jumpIdx+1:]=data_dict['f2RedGreen'][jumpIdx+1:]
                     data_dict['f2RedGreen'][jumpIdx+1:]=temp
             else:
-                
-                #DELETE
-                print("else")
-                
                 temp=data_dict['f1GreenIso'][jumpIdx+1:]
                 data_dict['f1GreenIso'][jumpIdx+1:]=data_dict['f1GreenGreen'][jumpIdx+1:]
                 data_dict['f1GreenGreen'][jumpIdx+1:]=data_dict['f1GreenRed'][jumpIdx+1:]
@@ -230,9 +222,7 @@ def import_fpho_data(input_filename, output_filename, f1greencol,
                     data_dict['f2RedRed'][jumpIdx+1:]=data_dict['f2RedIso'][jumpIdx+1:]
                     data_dict['f2RedIso'][jumpIdx+1:]=data_dict['f2RedGreen'][jumpIdx+1:]
                     data_dict['f2RedGreen'][jumpIdx+1:]=temp
-
-    fdata=pd.DataFrame.from_dict(data_dict)
-    return fdata
+    return(data_dict)
 
 
 def raw_signal_trace(fdata, file):
@@ -541,3 +531,6 @@ def lin_fit(values, a, b):
     values = np.array(values)
     
     return a * values + b
+
+
+
