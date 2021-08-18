@@ -10,11 +10,11 @@
 import_new: True
 
 #  Name/file path for file containing fiberpho data from Bonsai (string)
-input_filename: "Data/FiberPhoSig2021-05-28T10_46_57.csv"
+input_filename: "Data/FiberPhoSig2021-05-10T11_41_12.csv"
 
 # Name for output files including summary csv and plots 
 # Do not include a file type (e.g. "my_file_name")
-output_filename: "4030_4020"
+output_filename: "4033_3673"
 
 # Column index for green 1 (int between 3 and 6)
 f1greencol: 9
@@ -29,22 +29,28 @@ f2greencol: 10
 f2redcol: 6
 
 #  Number of the animal corresponding to fluoresence data (int)
-animal_ID: "4030_4020"
+animal_ID: "4033 3673"
 
 # Date of data collection (string, form: YYYY-MM-DD)           
-exp_date: "2020-5-28"
+exp_date: "2020-5-10"
 
 # Brief explantation of experiment (string)
-exp_desc: "Introductions"
+exp_desc: "Postbond"
 
-##To reload data that's been previously analyzed
+# If there is a frameshift in the data, indicate here with True (otherwise False)
+frameshift: False
+
+# If there is a frame shift, indicate the number of frame drops here, e.g. 1 (otherwise 0)
+framedrops: 0
+
+#To reload data that's been previously analyzed
 reload_data: False
 
 #Summary files to import
 reload_filenames: ["Data/4020_4030_Summary.csv"]
 
 # To write an excel file of fiberpho data, set True (otherwise False)
-write_xlsx: True
+write_xlsx: False
 
 # To plot the raw signal trace, set True (otherwise False)
 plot_raw_signal: True
@@ -58,7 +64,7 @@ all_signals: [f1GreenGreen, f2GreenGreen]
 all_references: [f1GreenIso, f2GreenIso]
 
 # To normalize your data using a reference and biexponential fits, set True (otherwise False)
-normalize_data: False
+normalize_data: True
 
 # ----------------------------------------------------------
 
@@ -69,7 +75,7 @@ normalize_data: False
 import_behavior: True
 
 # Name/file path of BORIS file containing behavior data (string)
-BORIS_file: "Data/10_46_57_boris_intro_fibers3&4.csv"
+BORIS_file: "Data/11_41_11_boris_postbond_fibers3&4.csv"
 
 plot_behavior: False
 
@@ -91,7 +97,7 @@ within_trial_pearsons: False
 channels: [[f1GreenGreen, f2GreenGreen]]
 
 #To run a pearson's correlation between two fibers from the same trial only while animals are doing a specific behavior, set True (otherwise False)
-behavior_specific_pearsons: False
+behavior_specific_pearsons: True
 
 #Add each behavior you would like to put through analysis, to combine two different behaviors add them to the same list
 behaviors: [['together'], ['separate']]
